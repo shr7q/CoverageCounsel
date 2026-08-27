@@ -1,0 +1,28 @@
+SAMPLE COVERAGE POLICY (synthetic, for testing only) — Bariatric Surgery
+
+Section 1. Coverage Criteria
+Bariatric surgery (Roux-en-Y gastric bypass, sleeve gastrectomy, or laparoscopic
+adjustable gastric banding) is covered for beneficiaries with a Body Mass Index
+(BMI) of 40 or greater, OR a BMI of 35 or greater with at least one obesity-related
+comorbidity such as type 2 diabetes, hypertension, or obstructive sleep apnea.
+
+Section 2. Exceptions
+Coverage does NOT apply if the beneficiary has a documented history of
+non-adherence to a physician-supervised weight management program within the
+preceding 24 months, EXCEPT where the prior non-adherence was due to a
+documented medical complication unrelated to the weight management program
+itself, as defined in Section 4.2 of the general medical necessity policy
+(see MED-NEC-GEN-01, not included in this sample set).
+
+Section 3. Documentation Requirements
+Claims require a psychological evaluation within 12 months of the surgical date,
+a nutritional consultation, and at least 6 months of physician-supervised weight
+management documentation preceding the surgery date.
+
+Section 4. Regional Variation
+Some MAC jurisdictions require an additional multidisciplinary team evaluation
+prior to approval; confirm jurisdiction-specific requirements before submission.
+
+Section 5. Effective Dates
+This determination is effective as of the most recent policy revision and
+supersedes all prior versions.

@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: healthcare_rag_postgres
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag_local_dev
+      POSTGRES_DB: healthcare_rag
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/2_seed.sql
+
+volumes:
+  pgdata:

@@ -1,0 +1,325 @@
+Medicare Benefit Policy Manual, Chapter 1 - Inpatient Hospital Services Covered Under Part A
+Section 10.2 - Hospital Inpatient Admission Order and Certification
+
+10.2 – Hospital Inpatient Admission Order and Certification 
+(Rev. 234, Issued: 03-10-17, Effective: 01-01-16, Implementation: 06-12-17) 
+
+The order to admit as an inpatient (“practitioner order”) is a critical element in clarifying 
+when an individual is considered an inpatient of a hospital, including a critical access 
+hospital (CAH), and is therefore required for all hospital inpatient cases for hospital 
+inpatient coverage and payment under Part A. As a condition of payment for hospital 
+inpatient services under Medicare Part A, according to section 1814(a) of the Social 
+Security Act, CMS is requiring, only for long-stay cases and outlier cases, separate 
+physician certification of the medical necessity that such services be provided on an 
+inpatient basis. The signed physician certification is considered, along with other 
+documentation in the medical record, as evidence that hospital inpatient service(s) were 
+reasonable and necessary. 
+
+The following guidance applies to all inpatient hospital and CAH services unless 
+otherwise specified. For the remainder of this guidance, references to hospitals includes 
+CAHs. The complete requirements for the physician certification are found in 42 CFR 
+Part 424 subpart B, and requirements for admission orders are found at 42 CFR 412.3. 
+
+A. Physician Certification. Physician certification of inpatient services is required 
+for cases that are 20 inpatient days or more (long-stay cases), for outlier cases of 
+hospitals other than inpatient psychiatric facilities and for cases of CAHs. (See 
+CY 2015 Outpatient Prospective Payment System Final Rule, 79 FR 66997 and 
+42 CFR 412 Subpart F, 42 CFR 424.13 and 42 CFR 424.15): 
+
+1. Content: The physician certification includes the following information: 
+
+a. Reason for inpatient services: The physician certifies the reasons for 
+either— (i) Continued hospitalization of the patient for inpatient medical 
+treatment or medically required inpatient diagnostic study; or (ii) Special 
+or unusual services for outlier cases under the applicable prospective 
+payment system for inpatient services. For example, documentation of an 
+admitting diagnosis could fulfill this part of the certification requirement. 
+
+b. The estimated (or actual) time the beneficiary requires or required in the 
+hospital: The physician certifies the estimated time in the hospital the 
+beneficiary requires (if the certification is completed prior to discharge) or 
+the actual time in the hospital (if the certification is completed at 
+discharge). Estimated or actual length of stay is most commonly reflected 
+in the progress notes where the practitioner discusses the assessment and 
+plan. For the purposes of meeting the requirement for certification, 
+expected or actual length of stay may be documented in the order or a 
+separate certification or recertification form, but it is also acceptable if 
+discussed in the progress notes assessment and plan or as part of routine 
+discharge planning. 
+
+If the reason an inpatient is still in the hospital is that they are waiting for 
+availability of a skilled nursing facility (SNF) bed, the regulations at 42 
+CFR 424.13(c) and 424.14(e) provide that a beneficiary who is already 
+appropriately an inpatient can be kept in the hospital as an inpatient if the 
+only reason they remain in the hospital is they are waiting for a post-acute 
+SNF bed. The physician may certify the need for continued inpatient 
+admission on this basis. 
+
+c. The plans for posthospital care, if appropriate, and as provided in 42 CFR 
+424.13. 
+
+d. For inpatient CAH services only, the physician must certify that the 
+beneficiary may reasonably be expected to be discharged or transferred to 
+a hospital within 96 hours after admission to the CAH. 
+
+Time as an outpatient at the CAH does not count towards the 96 hour 
+certification requirement. The clock for the 96 hour certification 
+requirement only begins once the individual is admitted to the CAH as an 
+inpatient. Time in a CAH swing-bed also does not count towards the 96 
+hour certification requirement. 
+
+The 96-hour certification requirement is based on an expectation at the 
+time of admission. If a physician certifies in good faith that an individual 
+may reasonably be expected to be discharged or transferred to a hospital 
+within 96 hours after admission to the CAH, and something unforeseen 
+occurs that causes the individual to stay longer at the CAH, the CAH 
+would be paid for that unforeseen extended inpatient stay as long as that 
+individual’s stay does not cause the CAH to exceed its 96-hour annual 
+average condition of participation requirement. However, if a physician 
+cannot in good faith certify that an individual may reasonably be expected 
+to be discharged or transferred within 96 hours after admission to the 
+CAH, the CAH will not receive Medicare reimbursement for any portion 
+of that individual’s inpatient stay. This would be determined based on a 
+medical review of the case. 
+
+All certification requirements must be completed, signed, and documented 
+in the medical record no later than 1 day before the date on which the 
+claim for payment for the inpatient CAH service is submitted, as provided 
+in the FY15 IPPS Final Rule and 42 CFR 424.11 and 42 CFR 424.15. 
+
+e. Inpatient Rehabilitation Facilities (IRFs): The documentation that IRFs 
+are already required to complete to meet the IRF coverage requirements 
+(such as the preadmission screening (including the physician review and 
+concurrence), the post-admission physician evaluation, and the required 
+admission orders) may be used to satisfy the certification and 
+recertification statement requirements. 
+
+2. Timing: Outlier cases must be certified and recertified as provided in 42 CFR 
+424.13. Under extenuating circumstances, delayed initial certification or 
+recertification of an outlier case may be acceptable as long as it does not 
+extend past discharge. For all other long stay cases, the certification must be 
+signed and documented no later than 20 days into the inpatient portion of the 
+hospital stay. 
+
+3. Authorization to sign the certification: The certification or recertification 
+may be signed only by one of the following: 
+
+(1) A physician who is a doctor of medicine or osteopathy. 
+(2) A dentist in the circumstances specified in 42 CFR 424.13(d). 
+(3) A doctor of podiatric medicine if his or her certification is consistent 
+with the functions he or she is authorized to perform under state law. 
+
+Certifications and recertifications must be signed by the physician responsible 
+for the case, or by another physician who has knowledge of the case and who 
+is authorized to do so by the responsible physician or by the hospital’s 
+medical staff (or by the dentist as provided in 42 CFR 424.11 and 42 CFR 
+424.13). CMS considers only the following physicians, podiatrists or dentists 
+to have sufficient knowledge of the case to serve as the certifying physician: 
+the admitting physician of record (“attending”) or a physician on call for him 
+or her; a surgeon responsible for a major surgical procedure on the beneficiary 
+or a surgeon on call for him or her; a dentist functioning as the admitting 
+physician of record or as the surgeon responsible for a major dental procedure; 
+and, in the specific case of a non‐physician non‐dentist admitting practitioner 
+who is licensed by the state and has been granted privileges by the facility, a 
+physician member of the hospital staff (such as a physician member of the 
+utilization review committee) who has reviewed the case and who also enters 
+into the record a complete certification statement that specifically contains all 
+of the content elements discussed above. The admitting physician of record 
+may be an emergency department physician or hospitalist. CMS does not 
+require the certifying physician to have inpatient admission privileges at the 
+hospital. 
+
+4. Format: As specified in 42 CFR 424.11, no specific procedures or forms are 
+required for certification and recertification statements. The provider may 
+adopt any method that permits verification. The certification and 
+recertification statements may be entered on forms, notes, or records that the 
+appropriate individual signs, or on a special separate form. Except as 
+provided for delayed certifications, there must be a separate signed statement 
+for each certification or recertification. If all the required information is 
+included in progress notes, the physician's statement could indicate that the 
+individual's medical record contains the information required and that hospital 
+inpatient services are or continue to be medically necessary. 
+
+B. Inpatient Order: A Medicare beneficiary is considered an inpatient of a hospital 
+if formally admitted as an inpatient pursuant to an order for inpatient admission 
+by an ordering practitioner. As stated in the FY 2014 IPPS Final Rule, 78 FR 
+50908 and 50941, and as conveyed in 42 CFR 482.24, if the order is not properly 
+documented in the medical record prior to discharge, the hospital should not 
+submit a claim for Part A payment. Meeting the two midnight benchmark does 
+not, in itself, render a beneficiary an inpatient or serve to qualify them for 
+payment under Part A. Rather, as provided in Medicare regulations, a beneficiary 
+is considered an inpatient (and Part A payment may only be made) if they are 
+formally admitted as such pursuant to an order for inpatient admission by an 
+ordering practitioner. 
+
+With regard to the time of discharge, a Medicare beneficiary is considered a 
+patient of the hospital until the effectuation of activities typically specified by the 
+ordering practitioner as having to occur prior to discharge (e.g., “discharge after 
+supper” or “discharge after voids”). Thus, discharge itself can but does not 
+always coincide exactly with the time that the discharge order is written, rather it 
+occurs when the ordering practitioner’s order for discharge is effectuated. 
+
+1. Content: The ordering practitioner’s order contains the instruction that the 
+beneficiary should be formally admitted for hospital inpatient care. The order 
+must specify admission for inpatient services. Inpatient rehabilitation 
+facilities (IRFs) must adhere to the admission requirements specified in 42 
+CFR 412.622. The two midnight benchmark does not apply in IRFs. 
+
+2. Qualifications of the ordering/admitting practitioner: The order must be 
+furnished by a physician or other practitioner (“ordering practitioner”) who is: 
+(a) licensed by the state to admit inpatients to hospitals, (b) granted privileges 
+by the hospital to admit inpatients to that specific facility, and (c) 
+knowledgeable about the patient’s hospital course, medical plan of care, and 
+current condition at the time of admission. See section (B)(3) for a discussion 
+of the requirements to be knowledgeable about the patient’s hospital course. 
+The ordering practitioner makes the determination of medical necessity for 
+inpatient care and renders the admission decision. The ordering practitioner is 
+not required to write the order but must authenticate (sign, or in the case of an 
+initial order (under (B)(2)(a)) or a verbal order (under (B)(2)(b)), countersign) 
+the order reflecting that he or she has made the decision to admit the patient 
+for inpatient services. 
+
+The admission decision (order) may not be delegated to another individual 
+who is not authorized by the state to admit patients, or has not been granted 
+admitting privileges by the hospital's medical staff. However, a medical 
+resident, physician assistant, nurse practitioner, or other non-physician 
+practitioner may act as a proxy for the ordering practitioner provided they are 
+authorized under state law to admit patients and the requirements outlined 
+below are met (FY 14 IPPS Final Rule and 42 CFR 412.3(b)). 
+
+a. Residents and non-physician practitioners authorized to make initial 
+admission decisions - Certain non-physician practitioners and residents 
+working within their residency program are authorized by the state in 
+which the hospital is located to admit inpatients, and are allowed by 
+hospital by-laws or policies to do the same. The ordering practitioner may 
+allow these individuals to write inpatient admission orders on his or her 
+behalf, if the ordering practitioner approves and accepts responsibility for 
+the admission decision by authenticating (countersigning) the order prior 
+to discharge. (See (A)(2) for guidance regarding the definition of 
+discharge time and (B)(3) for more guidance regarding knowledge of a 
+patient’s hospital course). In authenticating (countersigning) the order, the 
+ordering practitioner approves and accepts responsibility for the admission 
+decision. This process may also be used for practitioners (such as 
+emergency department physicians) who do not have admitting privileges 
+but are authorized by the hospital to issue temporary or “bridge” inpatient 
+admission orders. 
+
+b. Verbal orders- At some hospitals, individuals who lack the authority to 
+admit inpatients under state laws and hospital by‐laws (such as a 
+registered nurse) may nonetheless enter the inpatient admission order as a 
+verbal order. In these cases, the ordering practitioner directly 
+communicates the inpatient admission order to staff as a verbal (not 
+standing) order, and the ordering practitioner need not separately record 
+the order to admit. Following discussion with and at the direction of the 
+ordering practitioner, a verbal order for inpatient admission may be 
+documented by an individual who is not qualified to admit patients in his 
+or her own right, as long as that documentation (transcription) of the order 
+for inpatient admission is in accordance with state law including; scope‐
+of‐practice laws, hospital policies, and medical staff bylaws, rules, and 
+regulations. In this case, the staff receiving the verbal order must 
+document the verbal order in the medical record at the time it is received. 
+The order must identify the ordering practitioner and must be 
+authenticated (countersigned) by the ordering practitioner promptly and 
+prior to discharge. Example: “Admit to inpatient per Dr. Smith” would 
+be considered an acceptable method of identifying the ordering 
+practitioner and would meet the verbal order requirement if the verbal 
+order (1) is appropriately documented in the medical record by the 
+individual receiving the verbal order when the order is received; and (2) is 
+authenticated (countersigned) by Dr. Smith promptly, prior to discharge. 
+
+c. Standing orders and protocols - The inpatient admission order cannot be 
+a standing order. While Medicare’s rules do not prohibit use of a protocol 
+or algorithm that is part of a protocol, only the ordering practitioner, or a 
+resident or other practitioner acting on his or her behalf under section 
+(B)(2)(a) can make and take responsibility for the inpatient admission 
+decision. 
+
+d. Commencement of inpatient status - Inpatient status begins at the time 
+of formal admission by the hospital pursuant to the order, including an 
+initial order (under (B)(2)(a)) or a verbal order (under (B)(2)(b)) that is 
+authenticated (countersigned) timely, by authorized individuals, as 
+required in this section. If the practitioner responsible for authenticating 
+(countersigning) an initial order or verbal order does not agree that 
+inpatient admission was appropriate or valid (including an unauthorized 
+verbal order), he or she should not authenticate (countersign) the order and 
+the beneficiary is not considered to be an inpatient. The hospital stay may 
+be billed to Part B as a hospital outpatient encounter. 
+
+3. Knowledge of the patient’s hospital course: CMS considers only the 
+following practitioners to have sufficient knowledge about the beneficiary’s 
+hospital course, medical plan of care, and current condition to serve as the 
+ordering practitioner: the admitting physician of record (“attending”) or a 
+physician on call for him or her, primary or covering hospitalists caring for the 
+patient in the hospital, the beneficiary’s primary care practitioner or a 
+physician on call for the primary care practitioner, a surgeon responsible for a 
+major surgical procedure on the beneficiary or a surgeon on call for him or 
+her, emergency or clinic practitioners caring for the beneficiary at the point of 
+inpatient admission, and other practitioners qualified to admit inpatients and 
+actively treating the beneficiary at the point of the inpatient admission 
+decision. A utilization review committee physician functioning in that role 
+does not have direct responsibility for the care of the patient and is therefore 
+not considered to be sufficiently knowledgeable to order the inpatient 
+admission. The order must be written by one of the above practitioners 
+directly involved with the care of the beneficiary, and a utilization committee 
+physician may only write the order to admit if he or she is not acting in a 
+utilization review capacity and fulfills one of the direct patient care roles, such 
+as the attending physician. Utilization review may not be conducted by any 
+individual who was professionally involved in the care of the patient whose 
+case is being reviewed (42 CFR 482.30(d)(3)). 
+
+4. Timing: The order must be furnished at or before the time of the inpatient 
+admission. The order can be written in advance of the formal admission (e.g., 
+for a pre‐scheduled surgery), but the inpatient admission does not occur until 
+hospital care services are provided to the beneficiary. Conversely, in the 
+unusual case in which a patient is admitted as an inpatient prior to an order to 
+admit and there is no documented verbal order, the inpatient stay should not 
+be considered to commence until the inpatient admission order is documented. 
+CMS does not permit retroactive orders. Authentication by the ordering 
+practitioner of the order (either by signature or, in the case of an initial order 
+under (B)(2)(a) or a verbal order under (B)(2)(b), countersignature) is required 
+prior to discharge for all inpatient cases. 
+
+5. Specificity of the Order: The regulations at 42 CFR 412.3 require that, as a 
+condition of payment, an order for inpatient admission must be present in the 
+medical record. The preamble of the FY 2014 IPPS Final Rule at 78 FR 
+50942 states, “the order must specify the admitting practitioner’s 
+recommendation to admit ‘to inpatient,’ ‘as an inpatient,’ ‘for inpatient 
+services,’ or similar language specifying his or her recommendation for 
+inpatient care. While CMS does not require specific language to be used on 
+the inpatient admission order, it is in the interest of the hospital that the 
+ordering practitioner use language that clearly expresses intent to admit the 
+patient as inpatient that will be commonly understood by any individual who 
+could potentially review documentation of the inpatient stay. CMS does not 
+recommend using language that may have specific meaning only to 
+individuals that work in a particular hospital (e.g., “admit to 7W”) that will 
+not be commonly understood by others outside of the hospital. 
+
+If admission order language used to specify inpatient or outpatient status is 
+ambiguous, the best course of action would be to obtain and document 
+clarification from the ordering practitioner before initial Medicare billing 
+(ideally before the beneficiary is discharged). Under this policy, CMS will 
+continue to treat orders that specify a typically outpatient or other limited 
+service (e.g., admit “to ER,” “to Observation,” “to Recovery,” “to Outpatient 
+Surgery,” “to Day Surgery,” or “to Short Stay Surgery”) as defining a non‐
+inpatient service, and such orders will not be treated as meeting the inpatient 
+admission requirements. 
+
+The admission order is evidence of the decision by the ordering practitioner to 
+admit the beneficiary to inpatient status. In extremely rare circumstances, the 
+order to admit may be missing or defective (that is, illegible, or incomplete, 
+for example “inpatient” is not specified), yet the intent, decision, and 
+recommendation of the ordering practitioner to admit the beneficiary as an 
+inpatient can clearly be derived from the medical record. In these extremely 
+rare situations, contractors have been provided with discretion to determine 
+that this information constructively satisfies the requirement that the hospital 
+inpatient admission order be present in the medical record. However, in order 
+for the documentation to provide acceptable evidence to support the hospital 
+inpatient admission, thus satisfying the requirement for the order, there can be 
+no uncertainty regarding the intent, decision, and recommendation by the 
+ordering practitioner to admit the beneficiary as an inpatient, and no 
+reasonable possibility that the care could have been adequately provided in an 
+outpatient setting. 
+
+This narrow and limited alternative method of satisfying the requirement for 
+documentation of the inpatient admission order in the medical record should be extremely 
+rare, and may only be applied at the discretion of the contractor.

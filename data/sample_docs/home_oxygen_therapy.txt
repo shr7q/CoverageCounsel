@@ -1,0 +1,25 @@
+SAMPLE COVERAGE POLICY (synthetic, for testing only) — Home Oxygen Therapy
+
+Section 1. Coverage Criteria
+Home oxygen therapy is covered for beneficiaries with a documented arterial blood
+gas PO2 of 55 mm Hg or less, or an oxygen saturation of 88% or less, measured at
+rest, during exercise, or during sleep, using a device approved for that purpose.
+
+Section 2. Conditional Coverage
+For beneficiaries with a PO2 between 56 and 59 mm Hg, coverage requires at least
+one of the following: dependent edema suggesting congestive heart failure,
+pulmonary hypertension, or documented hematocrit greater than 56 percent.
+
+Section 3. Exceptions
+Coverage does not apply for beneficiaries whose hypoxemia is expected to resolve
+within 30 days, such as post-surgical or acute illness related hypoxemia, unless
+re-testing after 30 days confirms the qualifying threshold persists.
+
+Section 4. Documentation Requirements
+An initial certificate of medical necessity must be signed by the treating
+physician and renewed at 12 months for beneficiaries whose initial test showed
+borderline qualifying values.
+
+Section 5. Effective Dates
+This determination is effective as of the most recent policy revision and
+supersedes all prior versions.

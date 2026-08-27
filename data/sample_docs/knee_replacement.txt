@@ -1,0 +1,30 @@
+SAMPLE COVERAGE POLICY (synthetic, for testing only) — Total Knee Arthroplasty
+
+Section 1. Coverage Criteria
+Total knee arthroplasty (TKA) is covered when the beneficiary has radiographically
+confirmed severe osteoarthritis, rheumatoid arthritis, or post-traumatic arthritis of
+the knee, AND has failed at least 3 months of conservative management including
+physical therapy, NSAIDs, and at least one intra-articular corticosteroid or
+hyaluronic acid injection, AND has documented functional limitation affecting
+activities of daily living.
+
+Section 2. Exceptions
+Coverage does NOT apply if the primary indication is isolated patellofemoral
+arthritis without tricompartmental involvement, unless a partial knee arthroplasty
+is being billed instead under a separate policy (see LCD-KNEE-002).
+
+Section 3. Documentation Requirements
+Claims must include imaging reports dated within 6 months of the surgical date,
+a physical therapy completion note, and a physician attestation of failed
+conservative treatment.
+
+Section 4. Regional Variation
+This policy is issued by MAC Jurisdiction J-15. Beneficiaries in other MAC
+jurisdictions should consult the corresponding Local Coverage Determination, as
+conservative treatment duration requirements range from 6 weeks to 3 months
+depending on jurisdiction.
+
+Section 5. Effective Dates
+This determination is effective as of the most recent policy revision and
+supersedes all prior versions. Always confirm the effective date against the
+current CMS Medicare Coverage Database before relying on this determination.

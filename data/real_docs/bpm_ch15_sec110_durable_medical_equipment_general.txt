@@ -1,0 +1,234 @@
+Medicare Benefit Policy Manual, Chapter 15 - Covered Medical and Other Health Services
+Section 110-110.1 - Durable Medical Equipment, General and Definition
+
+110 - Durable Medical Equipment - General 
+(Rev. 1, 10-01-03) 
+B3-2100, A3-3113, HO-235, HHA-220 
+
+Expenses incurred by a beneficiary for the rental or purchases of durable medical equipment (DME) are 
+reimbursable if the following three requirements are met: 
+
+• The equipment meets the definition of DME (§110.1); 
+
+• The equipment is necessary and reasonable for the treatment of the patient’s illness or injury or to 
+improve the functioning of his or her malformed body member (§110.1); and 
+
+• The equipment is used in the patient’s home. 
+
+The decision whether to rent or purchase an item of equipment generally resides with the beneficiary, but the 
+decision on how to pay rests with CMS. For some DME, program payment policy calls for lump sum 
+payments and in others for periodic payment. Where covered DME is furnished to a beneficiary by a 
+supplier of services other than a provider of services, the DME MAC makes the reimbursement. If a 
+provider of services furnishes the equipment, the A/B MAC (A) or (HHH) makes the reimbursement. The 
+payment method is identified in the annual fee schedule update furnished by CMS. 
+
+The CMS issues quarterly updates to a fee schedule file that contains rates by HCPCS code and also 
+identifies the classification of the HCPCS code within the following categories. 
+
+Category Code Definition 
+IN Inexpensive and Other Routinely Purchased Items 
+FS Frequently Serviced Items 
+CR Capped Rental Items 
+OX Oxygen and Oxygen Equipment 
+OS Ostomy, Tracheostomy & Urological Items 
+SD Surgical Dressings 
+PO Prosthetics & Orthotics 
+SU Supplies 
+TE Transcutaneous Electrical Nerve Stimulators 
+
+The A/B MACs (A), (B), and (HHH), and DME MACs, where appropriate, use the CMS files to determine 
+payment rules. See the Medicare Claims Processing Manual, Chapter 20, “Durable Medical Equipment, 
+Surgical Dressings and Casts, Orthotics and Artificial Limbs, and Prosthetic Devices,” for a detailed 
+description of payment rules for each classification. 
+
+Payment may also be made for repairs, maintenance, and delivery of equipment and for expendable and 
+nonreusable items essential to the effective use of the equipment subject to the conditions in §110.2. 
+
+See the Medicare Benefit Policy Manual, Chapter 11, “End Stage Renal Disease,” for hemodialysis 
+equipment and supplies. 
+
+110.1 - Definition of Durable Medical Equipment 
+(Rev. 10880, Issued: 08-06-21, Effective: 11-08-21, Implementation: 11-08-21) 
+
+Durable medical equipment is equipment which: 
+
+• Can withstand repeated use; 
+
+• Is primarily and customarily used to serve a medical purpose; 
+
+• Generally is not useful to a person in the absence of an illness or injury; and 
+
+• Is appropriate for use in the home. 
+
+All requirements of the definition must be met before an item can be considered to be durable medical 
+equipment. 
+
+The following describes the underlying policies for determining whether an item meets the definition of 
+DME and may be covered. 
+
+A. Durability 
+
+An item is considered durable if it can withstand repeated use, i.e., the type of item that could normally be 
+rented. Medical supplies of an expendable nature, such as incontinent pads, lambs wool pads, catheters, ace 
+bandages, elastic stockings, surgical facemasks, irrigating kits, sheets, and bags are not considered “durable” 
+within the meaning of the definition. There are other items that, although durable in nature, may fall into 
+other coverage categories such as supplies, braces, prosthetic devices, artificial arms, legs, and eyes. 
+
+B. Medical Equipment 
+
+Medical equipment is equipment primarily and customarily used for medical purposes and is not generally 
+useful in the absence of illness or injury. In most instances, no development will be needed to determine 
+whether a specific item of equipment is medical in nature. However, some cases will require development 
+to determine whether the item constitutes medical equipment. This development would include the advice 
+of local medical organizations (hospitals, medical schools, medical societies) and specialists in the field of 
+physical medicine and rehabilitation. If the equipment is new on the market, it may be necessary, prior to 
+seeking professional advice, to obtain information from the supplier or manufacturer explaining the design, 
+purpose, effectiveness and method of using the equipment in the home as well as the results of any tests or 
+clinical studies that have been conducted. 
+
+1. Equipment Presumptively Medical 
+
+Items such as hospital beds, wheelchairs, hemodialysis equipment, iron lungs, respirators, intermittent 
+positive pressure breathing machines, medical regulators, oxygen tents, crutches, canes, trapeze bars, 
+walkers, inhalators, nebulizers, commodes, suction machines, and traction equipment presumptively 
+constitute medical equipment. (Although hemodialysis equipment is covered as a prosthetic device (§120), 
+it also meets the definition of DME, and reimbursement for the rental or purchase of such equipment for use 
+in the beneficiary’s home will be made only under the provisions for payment applicable to DME. See the 
+Medicare Benefit Policy Manual, Chapter 11, “End Stage Renal Disease,” §30.1, for coverage of home use 
+of hemodialysis.) NOTE: There is a wide variety in types of respirators and suction machines. The DME 
+MACs medical staff should determine whether the apparatus specified in the claim is appropriate for home 
+use. 
+
+2. Equipment Presumptively Nonmedical 
+
+Equipment which is primarily and customarily used for a nonmedical purpose may not be considered 
+“medical” equipment for which payment can be made under the medical insurance program. This is true 
+even though the item has some remote medically related use. For example, in the case of a cardiac patient, 
+an air conditioner might possibly be used to lower room temperature to reduce fluid loss in the patient and to 
+restore an environment conducive to maintenance of the proper fluid balance. Nevertheless, because the 
+primary and customary use of an air conditioner is a nonmedical one, the air conditioner cannot be deemed 
+to be medical equipment for which payment can be made. 
+
+Other devices and equipment used for environmental control or to enhance the environmental setting in 
+which the beneficiary is placed are not considered covered DME. These include, for example, room heaters, 
+humidifiers, dehumidifiers, and electric air cleaners. Equipment which basically serves comfort or 
+convenience functions or is primarily for the convenience of a person caring for the patient, such as 
+elevators, stairway elevators, and posture chairs, do not constitute medical equipment. Similarly, physical 
+fitness equipment (such as an exercycle), first-aid or precautionary-type equipment (such as preset portable 
+oxygen units), self-help devices (such as safety grab bars), and training equipment (such as Braille training 
+texts) are considered nonmedical in nature. 
+
+3. Special Exception Items 
+
+Specified items of equipment may be covered under certain conditions even though they do not meet the 
+definition of DME because they are not primarily and customarily used to serve a medical purpose and/or 
+are generally useful in the absence of illness or injury. These items would be covered when it is clearly 
+established that they serve a therapeutic purpose in an individual case and would include: 
+
+a. Gel pads and pressure and water mattresses (which generally serve a preventive purpose) 
+when prescribed for a patient who had bed sores or there is medical evidence indicating that 
+they are highly susceptible to such ulceration; and 
+
+b. Heat lamps for a medical rather than a soothing or cosmetic purpose, e.g., where the need for 
+heat therapy has been established. 
+
+In establishing medical necessity for the above items, the evidence must show that the item is included in the 
+physician’s course of treatment and a physician is supervising its use. 
+
+NOTE: The above items represent special exceptions and no extension of coverage to other items should be 
+inferred. 
+
+C. Necessary and Reasonable 
+
+Although an item may be classified as DME, it may not be covered in every instance. Coverage in a 
+particular case is subject to the requirement that the equipment be necessary and reasonable for treatment of 
+an illness or injury, or to improve the functioning of a malformed body member. These considerations will 
+bar payment for equipment which cannot reasonably be expected to perform a therapeutic function in an 
+individual case or will permit only partial therapeutic function in an individual case or will permit only 
+partial payment when the type of equipment furnished substantially exceeds that required for the treatment 
+of the illness or injury involved. 
+
+See the Medicare Claims Processing Manual, Chapter 1, “General Billing Requirements;” §60, regarding the 
+rules for providing advance beneficiary notices (ABNs) that advise beneficiaries, before items or services 
+actually are furnished, when Medicare is likely to deny payment for them. ABNs allow beneficiaries to 
+make an informed consumer decision about receiving items or services for which they may have to pay out-
+of-pocket and to be more active participants in their own health care treatment decisions. 
+
+1. Necessity for the Equipment 
+
+Equipment is necessary when it can be expected to make a meaningful contribution to the treatment of the 
+patient’s illness or injury or to the improvement of his or her malformed body member. In most cases the 
+physician’s prescription for the equipment and other medical information available to the DME MAC will 
+be sufficient to establish that the equipment serves this purpose. 
+
+2. Reasonableness of the Equipment 
+
+Even though an item of DME may serve a useful medical purpose, the DME MAC or A/B MAC (A) must 
+also consider to what extent, if any, it would be reasonable for the Medicare program to pay for the item 
+prescribed. The following considerations should enter into the determination of reasonableness: 
+
+1. Would the expense of the item to the program be clearly disproportionate to the therapeutic 
+benefits which could ordinarily be derived from use of the equipment? 
+
+2. Is the item substantially more costly than a medically appropriate and realistically feasible 
+alternative pattern of care? 
+
+3. Does the item serve essentially the same purpose as equipment already available to the 
+beneficiary? 
+
+3. Payment Consistent With What is Necessary and Reasonable 
+
+Where a claim is filed for equipment containing features of an aesthetic nature or features of a medical 
+nature which are not required by the patient’s condition or where there exists a reasonably feasible and 
+medically appropriate alternative pattern of care which is less costly than the equipment furnished, the 
+amount payable is based on the rate for the equipment or alternative treatment which meets the patient’s 
+medical needs. 
+
+The acceptance of an assignment binds the supplier-assignee to accept the payment for the medically 
+required equipment or service as the full charge and the supplier-assignee cannot charge the beneficiary the 
+differential attributable to the equipment actually furnished. 
+
+4. Establishing the Period of Medical Necessity 
+
+Generally, the period of time an item of durable medical equipment will be considered to be medically 
+necessary is based on the physician’s estimate of the time that his or her patient will need the equipment. 
+See the Medicare Program Integrity Manual, Chapters 5 and 6, for medical review guidelines. 
+
+D. Definition of a Beneficiary’s Home 
+
+For purposes of rental and purchase of DME a beneficiary’s home may be his/her own dwelling, an 
+apartment, a relative’s home, a home for the aged, or some other type of institution (such as an assisted 
+living facility, or an intermediate care facility for individuals with intellectual disabilities (ICF/IID)). 
+However, an institution may not be considered a beneficiary’s home if it: 
+
+• Meets at least the basic requirement (see §1861(e)(1) of the Social Security Act (the Act)) in the 
+definition of a hospital, i.e., it is primarily engaged in providing by or under the supervision of 
+physicians, to inpatients, diagnostic and therapeutic services for medical diagnosis, treatment, and 
+care of injured, disabled, and sick persons, or rehabilitation services for the rehabilitation of injured, 
+disabled, or sick persons; or 
+
+• Meets at least the basic requirement (see §1819(a)(1) of the Act) in the definition of a skilled nursing 
+facility, i.e., it is primarily engaged in providing to inpatients skilled nursing care and related 
+services for patients who require medical or nursing care, or rehabilitation services for the 
+rehabilitation of injured, disabled, or sick persons. 
+
+Thus, if an individual is a patient in an institution or distinct part of an institution which provides the 
+services described in the bullets above, the individual is not entitled to have separate Part B payment made 
+for rental or purchase of DME. This is because such an institution may not be considered the individual’s 
+home (see §§1861(s)(6) and 1861(n) of the Act, the implementing regulations at 42 CFR 410.38(b), and 
+§2160B in the State Operations Manual (SOM, Pub. 100-07), Chapter 2). 
+
+As indicated in §2164 of the SOM, Chapter 2, all hospitals and SNFs that are Medicare-certified are 
+automatically considered to meet the basic requirement described in the applicable bullet above by reason of 
+the Medicare certification itself. Moreover, even an institution (or portion of an institution) that is not 
+certified for Medicare is precluded from being considered a patient’s home in this context if it meets either 
+of these basic requirements. See §2166 of the SOM, Chapter 2, for the administrative criteria used in 
+determining whether the basic requirement in the “SNF” definition is met by a nursing home that is not 
+Medicare-certified (including the non-Medicare portion of an institution that also contains a Medicare-
+certified distinct part SNF). 
+
+If the patient is at home for part of a month and, for part of the same month is in an institution that cannot 
+qualify as his or her home, or is outside the U.S., monthly payments may be made for the entire month. 
+Similarly, if DME is returned to the provider before the end of a payment month because the beneficiary 
+died in that month or because the equipment became unnecessary in that month, payment may be made for 
+the entire month.

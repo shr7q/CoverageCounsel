@@ -1,0 +1,20 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# raw CMS bulk downloads -- large (the LCD .mdb alone is ~112MB, over
+# GitHub's 100MB hard limit) and fully reproducible: scripts/extract_real_docs.py
+# regenerates data/real_docs/ from these. Not worth version-controlling.
+data/*.mdb
+data/*.zip
+data/_extract/
+data/*.pdf
+data/readme_first.txt
+
+# local model / cache artifacts
+.cache/
