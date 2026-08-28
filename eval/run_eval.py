@@ -7,10 +7,11 @@ context?), answer_relevancy (does the answer actually address the question?),
 context_precision (are the retrieved chunks relevant, ranked against the
 golden set's reference answer?).
 
-This is the CI gate: run_eval.py exits non-zero if the mean faithfulness
-score drops below FAITHFULNESS_THRESHOLD, so a regression (e.g. reverting to
-dense-only retrieval, or breaking the reranker) fails the build instead of
-silently shipping worse answers.
+This is the CI gate: run_eval.py exits non-zero if mean faithfulness or mean
+answer_relevancy drops below its threshold, so a regression (e.g. reverting
+to dense-only retrieval, or breaking the reranker) fails the build instead of
+silently shipping worse answers. (Gating on faithfulness alone wasn't enough
+-- see the ANSWER_RELEVANCY_THRESHOLD comment below for what that missed.)
 
 Usage (from repo root):
     python eval/run_eval.py                  # full golden set
@@ -53,9 +54,31 @@ from hybrid_store import HybridStore
 from orchestrator import build_graph
 
 FAITHFULNESS_THRESHOLD = 0.7
+# Discovered empirically: reverting hybrid+rerank to dense-only retrieval
+# (the Week 3 regression this gate exists to catch) barely moved
+# faithfulness (0.708 -> 0.755, within local-model run-to-run noise on 42
+# questions) but dropped answer_relevancy substantially (0.716 -> 0.605).
+# Faithfulness alone isn't a reliable enough signal for a retrieval-quality
+# regression -- gate on both.
+ANSWER_RELEVANCY_THRESHOLD = 0.65
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "real_docs")
 GOLDEN_SET_PATH = os.path.join(os.path.dirname(__file__), "golden_set.json")
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "results.json")
+
+
+def check_thresholds(means: dict) -> list[str]:
+    """Returns a list of failure messages; empty list means the gate passes."""
+    failures = []
+    if means["faithfulness"] < FAITHFULNESS_THRESHOLD:
+        failures.append(
+            f"mean faithfulness {means['faithfulness']:.3f} is below the {FAITHFULNESS_THRESHOLD} threshold"
+        )
+    if means["answer_relevancy"] < ANSWER_RELEVANCY_THRESHOLD:
+        failures.append(
+            f"mean answer_relevancy {means['answer_relevancy']:.3f} is below the "
+            f"{ANSWER_RELEVANCY_THRESHOLD} threshold"
+        )
+    return failures
 
 
 def _build_ragas_llm_and_embeddings():
@@ -179,14 +202,14 @@ def main():
         print(f"  {name}: {value:.3f}")
     print(f"\nPer-question results written to {RESULTS_PATH}")
 
-    if means["faithfulness"] < FAITHFULNESS_THRESHOLD:
-        print(
-            f"\nFAIL: mean faithfulness {means['faithfulness']:.3f} is below "
-            f"the {FAITHFULNESS_THRESHOLD} threshold -- regression gate tripped."
-        )
+    failures = check_thresholds(means)
+    if failures:
+        print("\nFAIL: regression gate tripped --")
+        for msg in failures:
+            print(f"  - {msg}")
         sys.exit(1)
 
-    print("\nPASS: faithfulness above threshold.")
+    print("\nPASS: all thresholds met.")
 
 
 if __name__ == "__main__":
