@@ -143,15 +143,31 @@ def main():
     dataset = Dataset.from_list(records)
     llm, embeddings = _build_ragas_llm_and_embeddings()
 
+    # RAGAS's default RunConfig fires up to 16 concurrent scoring calls. A
+    # single local Ollama instance can't serve that much concurrent load --
+    # the first full run silently dropped 30/42 context_precision scores to
+    # NaN from timeouts, which pandas .mean() then averaged over the
+    # survivors as if nothing were missing. Serialize more for a local
+    # model; a real hosted API (CI) can handle the default concurrency.
+    from ragas.run_config import RunConfig
+
+    run_config = RunConfig(max_workers=1, timeout=420) if os.environ.get("LLM_PROVIDER") == "ollama" else RunConfig()
+
     print("\nScoring with RAGAS (faithfulness, answer_relevancy, context_precision)...")
     scored = evaluate(
         dataset,
         metrics=[faithfulness, answer_relevancy, context_precision],
         llm=llm,
         embeddings=embeddings,
+        run_config=run_config,
     )
     df = scored.to_pandas()
     df.to_json(RESULTS_PATH, orient="records", indent=2)
+
+    missing = {col: int(df[col].isna().sum()) for col in ("faithfulness", "answer_relevancy", "context_precision")}
+    if any(missing.values()):
+        print(f"\nWARNING: some scores are missing (likely timeouts): {missing}")
+        print("Treat the means below as computed only over the questions that scored successfully.")
 
     means = {
         "faithfulness": float(df["faithfulness"].mean()),
