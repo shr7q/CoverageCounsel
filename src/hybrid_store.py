@@ -15,6 +15,11 @@ Week 8: BM25 scoring and reranking are pulled into their own @traceable
 methods (dense search already traces itself, see embed_store.py) so a
 LangSmith trace shows each retrieval stage's own scores as a distinct
 nested span, not just the final fused-and-reranked output.
+
+Week 9: the dense backend is swappable (VECTOR_STORE=memory|pgvector) --
+BM25 stays in-memory regardless, since migrating it to Postgres full-text
+search is a separate, bigger change than "give the dense vectors a real
+database," which is what this week's plan item actually asked for.
 """
 
 import os
@@ -29,6 +34,10 @@ from embed_store import InMemoryStore
 
 RERANK_MODEL = os.environ.get("RERANK_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2")
 RRF_K = 60  # standard RRF damping constant
+# pgvector is the default -- Postgres has been a hard dependency since Week 6's
+# RBAC anyway. VECTOR_STORE=memory reproduces the original walking-skeleton
+# store for comparison, or for running without Docker up.
+VECTOR_STORE = os.environ.get("VECTOR_STORE", "pgvector")
 
 
 def _tokenize(text: str) -> list[str]:
@@ -37,7 +46,12 @@ def _tokenize(text: str) -> list[str]:
 
 class HybridStore:
     def __init__(self):
-        self.dense = InMemoryStore()
+        if VECTOR_STORE == "pgvector":
+            from pgvector_store import PgVectorStore
+
+            self.dense = PgVectorStore()
+        else:
+            self.dense = InMemoryStore()
         self.chunks: list[Chunk] = []
         self.bm25: BM25Okapi | None = None
         self._reranker: CrossEncoder | None = None

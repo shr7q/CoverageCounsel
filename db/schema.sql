@@ -33,3 +33,19 @@ CREATE TABLE query_log (
     retrieved_doc_ids TEXT[] NOT NULL,
     queried_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Week 9: real vector store, replacing the in-memory numpy array from the
+-- walking skeleton. 768 dims matches nomic-embed-text (local Ollama dev);
+-- re-embedding + a new column is required if the embedding model ever
+-- changes dimension (e.g. OpenAI text-embedding-3-small is 1536) -- that's
+-- an accepted migration cost, not something worth engineering around now.
+CREATE EXTENSION IF NOT EXISTS vector;
+
+CREATE TABLE chunks (
+    chunk_id TEXT PRIMARY KEY,
+    doc_id TEXT NOT NULL REFERENCES documents(doc_id),
+    text TEXT NOT NULL,
+    embedding VECTOR(768) NOT NULL
+);
+
+CREATE INDEX chunks_embedding_hnsw_idx ON chunks USING hnsw (embedding vector_cosine_ops);

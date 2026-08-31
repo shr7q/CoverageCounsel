@@ -12,3 +12,4 @@ langchain-ollama>=0.2.0
 langchain-core>=0.3.0
 datasets>=3.0.0
 langsmith>=0.2.0
+pgvector>=0.3.0
