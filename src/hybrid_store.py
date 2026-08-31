@@ -10,11 +10,17 @@ lists "supervised physical therapy" never made the cut). BM25 catches exact
 keyword overlap that a single embedding's cosine similarity can underweight;
 the cross-encoder then re-scores each (query, chunk) pair directly instead of
 relying on one pre-computed vector per chunk.
+
+Week 8: BM25 scoring and reranking are pulled into their own @traceable
+methods (dense search already traces itself, see embed_store.py) so a
+LangSmith trace shows each retrieval stage's own scores as a distinct
+nested span, not just the final fused-and-reranked output.
 """
 
 import os
 import re
 
+from langsmith import traceable
 from rank_bm25 import BM25Okapi
 from sentence_transformers import CrossEncoder
 
@@ -49,6 +55,24 @@ class HybridStore:
             self._reranker = CrossEncoder(RERANK_MODEL)
         return self._reranker
 
+    @traceable(name="bm25_search")
+    def _bm25_search(self, query: str, candidate_k: int, allowed_doc_ids: set[str] | None) -> list[str]:
+        bm25_scores = self.bm25.get_scores(_tokenize(query))
+        if allowed_doc_ids is not None:
+            for i, chunk in enumerate(self.chunks):
+                if chunk.doc_id not in allowed_doc_ids:
+                    bm25_scores[i] = -1
+        order = sorted(range(len(self.chunks)), key=lambda i: -bm25_scores[i])[:candidate_k]
+        return [self.chunks[i].chunk_id for i in order if bm25_scores[i] != -1]
+
+    @traceable(name="cross_encoder_rerank")
+    def _rerank(self, query: str, candidates: list[Chunk], top_k: int) -> list[tuple[Chunk, float]]:
+        pairs = [(query, c.text) for c in candidates]
+        scores = self.reranker.predict(pairs)
+        reranked = sorted(zip(candidates, scores), key=lambda cs: -cs[1])
+        return [(c, float(s)) for c, s in reranked[:top_k]]
+
+    @traceable(name="hybrid_search")
     def search(
         self,
         query: str,
@@ -66,14 +90,7 @@ class HybridStore:
         dense_ranked_ids = [
             c.chunk_id for c, _ in self.dense.search(query, top_k=candidate_k, allowed_doc_ids=allowed_doc_ids)
         ]
-
-        bm25_scores = self.bm25.get_scores(_tokenize(query))
-        if allowed_doc_ids is not None:
-            for i, chunk in enumerate(self.chunks):
-                if chunk.doc_id not in allowed_doc_ids:
-                    bm25_scores[i] = -1
-        bm25_order = sorted(range(len(self.chunks)), key=lambda i: -bm25_scores[i])[:candidate_k]
-        bm25_ranked_ids = [self.chunks[i].chunk_id for i in bm25_order if bm25_scores[i] != -1]
+        bm25_ranked_ids = self._bm25_search(query, candidate_k, allowed_doc_ids)
 
         fused_scores: dict[str, float] = {}
         for ranked_ids in (dense_ranked_ids, bm25_ranked_ids):
@@ -84,7 +101,4 @@ class HybridStore:
         top_fused = sorted(fused_scores.items(), key=lambda kv: -kv[1])[:candidate_k]
         candidate_chunks = [by_id[chunk_id] for chunk_id, _ in top_fused]
 
-        pairs = [(query, c.text) for c in candidate_chunks]
-        rerank_scores = self.reranker.predict(pairs)
-        reranked = sorted(zip(candidate_chunks, rerank_scores), key=lambda cs: -cs[1])
-        return [(c, float(s)) for c, s in reranked[:top_k]]
+        return self._rerank(query, candidate_chunks, top_k)

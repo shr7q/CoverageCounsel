@@ -10,6 +10,7 @@ database anyway.
 
 import os
 import numpy as np
+from langsmith import traceable
 from openai import OpenAI
 from chunking import Chunk
 
@@ -48,6 +49,7 @@ class InMemoryStore:
         # normalize once so search is a plain dot product
         self.vectors = self.vectors / np.linalg.norm(self.vectors, axis=1, keepdims=True)
 
+    @traceable(name="dense_search")
     def search(
         self, query: str, top_k: int = 4, allowed_doc_ids: set[str] | None = None
     ) -> list[tuple[Chunk, float]]:

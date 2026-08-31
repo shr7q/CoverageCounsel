@@ -7,12 +7,19 @@ place query.py used it before.
 LLM_PROVIDER=ollama runs fully local against Ollama's OpenAI-compatible
 endpoint (no API key needed). Set back to "anthropic" to use real Claude once
 real keys are in place.
+
+Week 8: @traceable here is what makes the prompt actually sent, the model,
+and token usage show up per-call in LangSmith -- LangGraph's own tracing
+covers node-to-node flow automatically, but calls made with the raw
+OpenAI/Anthropic SDKs (not LangChain's chat model wrappers) aren't traced
+unless explicitly wrapped like this.
 """
 
 import os
 import re
 
 from anthropic import Anthropic
+from langsmith import get_current_run_tree, traceable
 from openai import OpenAI
 
 LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "anthropic")
@@ -26,6 +33,17 @@ def extract_json_array(text: str) -> str:
     return match.group(0) if match else "[]"
 
 
+def _record_usage(model: str, usage) -> None:
+    run = get_current_run_tree()
+    if run is None:
+        return
+    run.metadata["provider"] = LLM_PROVIDER
+    run.metadata["model"] = model
+    if usage is not None:
+        run.metadata["usage"] = usage.model_dump() if hasattr(usage, "model_dump") else dict(usage)
+
+
+@traceable(name="llm_generate", run_type="llm")
 def generate(system_prompt: str, user_content: str, max_tokens: int = 500) -> str:
     if LLM_PROVIDER == "ollama":
         client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
@@ -37,6 +55,7 @@ def generate(system_prompt: str, user_content: str, max_tokens: int = 500) -> st
                 {"role": "user", "content": user_content},
             ],
         )
+        _record_usage(OLLAMA_MODEL, response.usage)
         return response.choices[0].message.content
 
     client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
@@ -46,4 +65,5 @@ def generate(system_prompt: str, user_content: str, max_tokens: int = 500) -> st
         system=system_prompt,
         messages=[{"role": "user", "content": user_content}],
     )
+    _record_usage("claude-sonnet-4-6", response.usage)
     return "".join(block.text for block in response.content if block.type == "text")
