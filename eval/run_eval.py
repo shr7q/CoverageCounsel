@@ -172,15 +172,18 @@ def main():
     dataset = Dataset.from_list(records)
     llm, embeddings = _build_ragas_llm_and_embeddings()
 
-    # RAGAS's default RunConfig fires up to 16 concurrent scoring calls. A
-    # single local Ollama instance can't serve that much concurrent load --
-    # the first full run silently dropped 30/42 context_precision scores to
-    # NaN from timeouts, which pandas .mean() then averaged over the
-    # survivors as if nothing were missing. Serialize more for a local
-    # model; a real hosted API (CI) can handle the default concurrency.
+    # RAGAS's default RunConfig fires up to 16 concurrent scoring calls.
+    # Originally serialized only for local Ollama (a single instance can't
+    # serve that much concurrent load), on the assumption a real hosted API
+    # would handle the default concurrency fine in CI. It didn't: a real run
+    # against Claude hit the same wall -- every context_precision score came
+    # back NaN from timeouts, almost certainly this API tier's rate limits
+    # rejecting 16 concurrent requests. Serializing unconditionally is slower
+    # (a CI gate that isn't time-critical can afford ~30-60 min) but reliable
+    # regardless of what's actually behind LLM_PROVIDER.
     from ragas.run_config import RunConfig
 
-    run_config = RunConfig(max_workers=1, timeout=420) if os.environ.get("LLM_PROVIDER") == "ollama" else RunConfig()
+    run_config = RunConfig(max_workers=1, timeout=420)
 
     print("\nScoring with RAGAS (faithfulness, answer_relevancy, context_precision)...")
     scored = evaluate(
