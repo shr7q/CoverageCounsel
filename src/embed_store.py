@@ -18,6 +18,10 @@ from chunking import Chunk
 # endpoint (no API key needed). Set back to "openai" to use the real
 # text-embedding-3-small endpoint once real keys are in place.
 EMBED_PROVIDER = os.environ.get("EMBED_PROVIDER", "openai")
+# "localhost" means the container itself when running in Docker -- override
+# to http://host.docker.internal:11434/v1 to reach an Ollama instance
+# running on the host machine from inside a container.
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 
 if EMBED_PROVIDER == "ollama":
     EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "nomic-embed-text")
@@ -28,7 +32,7 @@ else:
 class InMemoryStore:
     def __init__(self, api_key: str | None = None):
         if EMBED_PROVIDER == "ollama":
-            self.client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+            self.client = OpenAI(base_url=OLLAMA_BASE_URL, api_key="ollama")
         else:
             self.client = OpenAI(api_key=api_key or os.environ.get("OPENAI_API_KEY"))
         self.chunks: list[Chunk] = []

@@ -24,6 +24,8 @@ from openai import OpenAI
 
 LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "anthropic")
 OLLAMA_MODEL = os.environ.get("OLLAMA_LLM_MODEL", "llama3.1:8b")
+# see embed_store.py's OLLAMA_BASE_URL comment -- same reasoning applies here
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 
 
 def extract_json_array(text: str) -> str:
@@ -46,7 +48,7 @@ def _record_usage(model: str, usage) -> None:
 @traceable(name="llm_generate", run_type="llm")
 def generate(system_prompt: str, user_content: str, max_tokens: int = 500) -> str:
     if LLM_PROVIDER == "ollama":
-        client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+        client = OpenAI(base_url=OLLAMA_BASE_URL, api_key="ollama")
         response = client.chat.completions.create(
             model=OLLAMA_MODEL,
             max_tokens=max_tokens,

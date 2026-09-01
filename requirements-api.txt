@@ -1,0 +1,16 @@
+# Runtime dependencies for the deployed API (api.py) only -- excludes
+# eval-only packages (ragas, langchain-ollama, datasets) and the one-time
+# data-extraction script's pypdf, which don't belong in a serving container.
+# See requirements.txt for the full local-dev set.
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+anthropic>=0.40.0
+openai>=1.50.0
+numpy>=1.26.0
+python-dotenv>=1.0.0
+rank_bm25>=0.2.2
+sentence-transformers>=3.0.0
+langgraph>=0.2.0
+psycopg2-binary>=2.9.0
+langsmith>=0.2.0
+pgvector>=0.3.0

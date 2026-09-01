@@ -1,0 +1,17 @@
+.env
+.git
+.github
+__pycache__
+*.pyc
+venv
+.venv
+db/
+docker-compose.yml
+eval/
+scripts/
+data/*.mdb
+data/*.zip
+data/_extract
+data/*.pdf
+data/readme_first.txt
+data/sample_docs

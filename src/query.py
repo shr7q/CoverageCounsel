@@ -36,8 +36,11 @@ RETRIEVAL_MODE = os.environ.get("RETRIEVAL_MODE", "hybrid")
 # against the LangGraph decompose-and-synthesize pipeline.
 USE_ORCHESTRATOR = os.environ.get("USE_ORCHESTRATOR", "true").lower() == "true"
 
+# RAG_DATA_DIR=sample_docs reproduces the original synthetic control set;
+# real_docs (the real CMS corpus, Week 1) is the default for anything meant
+# to actually answer questions.
 DATA_DIR = os.path.join(
-    os.path.dirname(__file__), "..", "data", os.environ.get("RAG_DATA_DIR", "sample_docs")
+    os.path.dirname(__file__), "..", "data", os.environ.get("RAG_DATA_DIR", "real_docs")
 )
 
 SYSTEM_PROMPT = """You are a healthcare coverage policy assistant. Answer the
@@ -77,16 +80,18 @@ def answer_question(store: InMemoryStore, question: str, top_k: int = 4) -> None
     print(generate(SYSTEM_PROMPT, user_content))
 
 
-def answer_question_orchestrated(store: InMemoryStore, question: str, user: dict | None = None) -> None:
+def run_orchestrated_query(store: InMemoryStore, question: str, user: dict | None = None) -> dict:
     """LangGraph pipeline: decomposes multi-part questions before retrieval,
-    then verifies the answer's inline citations before returning it.
+    then verifies the answer's inline citations before returning it. Returns
+    the raw graph result dict (JSON-serializable except for the Chunk
+    objects nested in "retrieved") -- both the CLI and api.py's HTTP
+    endpoint build their own presentation on top of this shared call so the
+    actual pipeline logic (and query logging) isn't duplicated between them.
 
     user, when given, scopes retrieval to that user's RBAC access_levels
     (Week 6) -- resolved from Postgres via db.get_user(), enforced inside
     store.search() itself, not filtered from the answer afterward."""
     allowed_doc_ids = db.get_allowed_doc_ids(user["access_levels"]) if user else None
-    if user:
-        print(f"Running as: {user['username']} (role: {user['role']}, access: {sorted(user['access_levels'])})\n")
 
     graph = build_graph(store)
     result = graph.invoke(
@@ -100,6 +105,21 @@ def answer_question_orchestrated(store: InMemoryStore, question: str, user: dict
             "allowed_doc_ids": allowed_doc_ids,
         }
     )
+
+    if user:
+        all_retrieved_ids = sorted({c.chunk_id for r in result["retrieved"].values() for c, _ in r})
+        db.log_query(user["id"], question, all_retrieved_ids)
+
+    return result
+
+
+def answer_question_orchestrated(store: InMemoryStore, question: str, user: dict | None = None) -> None:
+    """CLI presentation on top of run_orchestrated_query -- see api.py for
+    the HTTP presentation of the same underlying call."""
+    if user:
+        print(f"Running as: {user['username']} (role: {user['role']}, access: {sorted(user['access_levels'])})\n")
+
+    result = run_orchestrated_query(store, question, user=user)
 
     print(f"Decomposed into {len(result['sub_questions'])} sub-question(s):")
     for sq in result["sub_questions"]:
@@ -126,10 +146,6 @@ def answer_question_orchestrated(store: InMemoryStore, question: str, user: dict
             print(f"  [{f.get('chunk_id')}] {f.get('claim')!r} -- {f.get('reason')}")
     elif flags:
         print(f"Faithfulness check: all {len(flags)} citation(s) supported.")
-
-    if user:
-        all_retrieved_ids = sorted({c.chunk_id for r in result["retrieved"].values() for c, _ in r})
-        db.log_query(user["id"], question, all_retrieved_ids)
 
 
 if __name__ == "__main__":
