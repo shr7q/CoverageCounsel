@@ -50,11 +50,17 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
+          token_format: access_token
 
       - uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+      # `gcloud auth configure-docker`'s credential helper doesn't reliably
+      # pick up WIF-derived (External Account) credentials -- a documented
+      # gotcha that showed up here as "Unauthenticated request" on push
+      # despite auth succeeding. Logging in with the access token this auth
+      # step exports (token_format: access_token, above) sidesteps it.
+      - name: Log in to Artifact Registry
+        run: echo "${{ steps.auth.outputs.access_token }}" | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
 
       - name: Build and push image
         run: |
