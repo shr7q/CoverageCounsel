@@ -7,18 +7,17 @@ name: Deploy to Cloud Run
 # blocks the deploy from ever running, not just the merge.
 #
 # Dormant until:
-#   1. This repo is pushed to GitHub (local-only right now, by design --
-#      see the Week 7 conversation about sequencing that decision)
+#   1. This repo is pushed to GitHub -- done (github.com/shr7q/CoverageCounsel)
 #   2. A Google Cloud project exists with Cloud Run + Artifact Registry
-#      enabled, and a service account key is stored as the GCP_SA_KEY secret
-#      (Workload Identity Federation is the more modern, keyless way to do
-#      this auth step -- worth switching to once the project is live, a
-#      service account JSON key is the simpler one to set up and explain
-#      first)
-#   3. Repository secrets are set: GCP_PROJECT_ID, GCP_SA_KEY,
-#      ANTHROPIC_API_KEY, OPENAI_API_KEY, DATABASE_URL (a hosted Postgres
-#      with pgvector -- Supabase or Neon, not this laptop's Docker
-#      container), LANGSMITH_API_KEY
+#      enabled (project ID: project-66080af2-c02c-434f-917), a
+#      github-deploy service account, and Workload Identity Federation set
+#      up between them (keyless -- no long-lived JSON key to leak)
+#   3. Repository secrets are set: GCP_WORKLOAD_IDENTITY_PROVIDER (the
+#      provider's full resource name, ".../workloadIdentityPools/
+#      github-actions-pool/providers/<provider-id>"), ANTHROPIC_API_KEY,
+#      OPENAI_API_KEY, DATABASE_URL (a hosted Postgres with pgvector --
+#      Supabase or Neon, not this laptop's Docker container),
+#      LANGSMITH_API_KEY
 
 on:
   workflow_run:
@@ -27,10 +26,16 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+permissions:
+  id-token: write  # required for Workload Identity Federation
+  contents: read
+
 env:
+  GCP_PROJECT_ID: project-66080af2-c02c-434f-917
   GCP_REGION: us-central1
   SERVICE_NAME: healthcare-rag-api
-  IMAGE: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/healthcare-rag/api
+  SERVICE_ACCOUNT: github-deploy@project-66080af2-c02c-434f-917.iam.gserviceaccount.com
+  IMAGE: us-central1-docker.pkg.dev/project-66080af2-c02c-434f-917/healthcare-rag/api
 
 jobs:
   deploy:
@@ -42,7 +47,8 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - uses: google-github-actions/setup-gcloud@v2
 
@@ -56,11 +62,15 @@ jobs:
           docker push ${{ env.IMAGE }}:latest
 
       - name: Deploy to Cloud Run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image ${{ env.IMAGE }}:${{ github.sha }} \
             --region ${{ env.GCP_REGION }} \
             --platform managed \
             --allow-unauthenticated \
-            --set-env-vars EMBED_PROVIDER=openai,LLM_PROVIDER=anthropic,RETRIEVAL_MODE=hybrid,VECTOR_STORE=pgvector,RAG_DATA_DIR=real_docs,LANGSMITH_TRACING=true,LANGSMITH_PROJECT=healthcare-rag \
-            --set-secrets ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,OPENAI_API_KEY=OPENAI_API_KEY:latest,DATABASE_URL=DATABASE_URL:latest,LANGSMITH_API_KEY=LANGSMITH_API_KEY:latest
+            --set-env-vars "EMBED_PROVIDER=openai,LLM_PROVIDER=anthropic,RETRIEVAL_MODE=hybrid,VECTOR_STORE=pgvector,RAG_DATA_DIR=real_docs,LANGSMITH_TRACING=true,LANGSMITH_PROJECT=healthcare-rag,ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY,OPENAI_API_KEY=$OPENAI_API_KEY,DATABASE_URL=$DATABASE_URL,LANGSMITH_API_KEY=$LANGSMITH_API_KEY"
