@@ -31,6 +31,20 @@ class PgVectorStore:
         register_vector(self.conn)
 
     def index(self, chunks: list[Chunk], batch_size: int = 50) -> None:
+        """Skips re-embedding entirely if the DB already holds exactly this
+        set of chunk_ids. With a real embeddings API (not free local Ollama)
+        behind this, re-embedding the whole corpus on every Cloud Run cold
+        start -- which happens often once it scales to zero on low traffic
+        -- would mean paying OpenAI again for work already done and sitting
+        untouched in Supabase. Doesn't detect a chunk whose *text* changed
+        while its id stayed the same; fine for a corpus that only changes
+        via a new deploy, not a substitute for real content-hash tracking."""
+        with self.conn.cursor() as cur:
+            cur.execute("SELECT chunk_id FROM chunks")
+            existing_ids = {row[0] for row in cur.fetchall()}
+        if existing_ids == {c.chunk_id for c in chunks}:
+            return
+
         with self.conn.cursor() as cur:
             cur.execute("TRUNCATE chunks")
         for i in range(0, len(chunks), batch_size):
