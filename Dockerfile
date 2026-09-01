@@ -13,17 +13,20 @@ COPY requirements-api.txt .
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -r requirements-api.txt
 
-# Bake the cross-encoder reranker model into the image so a cold container
-# start doesn't also pay for a ~90MB download from Hugging Face on the
-# first request.
+# Bake the cross-encoder reranker and embedding models into the image so a
+# cold container start doesn't also pay for a Hugging Face download on the
+# first request. Embeddings run locally (sentence_transformers) rather than
+# through OpenAI -- free, no API key, no per-cold-start re-embedding cost;
+# see embed_store.py and pgvector_store.py for why that matters here.
 RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-mpnet-base-v2')"
 
 COPY src/ ./src/
 COPY data/real_docs/ ./data/real_docs/
 
 WORKDIR /app/src
 
-ENV EMBED_PROVIDER=openai \
+ENV EMBED_PROVIDER=sentence_transformers \
     LLM_PROVIDER=anthropic \
     RETRIEVAL_MODE=hybrid \
     VECTOR_STORE=pgvector \

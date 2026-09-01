@@ -101,6 +101,12 @@ def _build_ragas_llm_and_embeddings():
 
     if embed_provider == "ollama":
         embeddings = OllamaEmbeddings(model=os.environ.get("OLLAMA_EMBED_MODEL", "nomic-embed-text"))
+    elif embed_provider == "sentence_transformers":
+        from langchain_huggingface import HuggingFaceEmbeddings
+
+        embeddings = HuggingFaceEmbeddings(
+            model_name=os.environ.get("SENTENCE_TRANSFORMERS_EMBED_MODEL", "sentence-transformers/all-mpnet-base-v2")
+        )
     else:
         from langchain_openai import OpenAIEmbeddings
 

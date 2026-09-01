@@ -17,7 +17,7 @@ from langsmith import traceable
 from pgvector.psycopg2 import register_vector
 
 from chunking import Chunk
-from embed_store import InMemoryStore
+from embed_store import EMBED_MODEL, EMBED_PROVIDER, InMemoryStore
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", "postgresql://rag:rag_local_dev@localhost:5432/healthcare_rag"
@@ -29,20 +29,36 @@ class PgVectorStore:
         self._embedder = InMemoryStore()
         self.conn = psycopg2.connect(DATABASE_URL)
         register_vector(self.conn)
+        with self.conn.cursor() as cur:
+            cur.execute("CREATE TABLE IF NOT EXISTS embedding_meta (key TEXT PRIMARY KEY, value TEXT)")
+        self.conn.commit()
+
+    def _stored_embed_model(self) -> str | None:
+        with self.conn.cursor() as cur:
+            cur.execute("SELECT value FROM embedding_meta WHERE key = 'embed_model'")
+            row = cur.fetchone()
+        return row[0] if row else None
 
     def index(self, chunks: list[Chunk], batch_size: int = 50) -> None:
         """Skips re-embedding entirely if the DB already holds exactly this
-        set of chunk_ids. With a real embeddings API (not free local Ollama)
-        behind this, re-embedding the whole corpus on every Cloud Run cold
-        start -- which happens often once it scales to zero on low traffic
-        -- would mean paying OpenAI again for work already done and sitting
-        untouched in Supabase. Doesn't detect a chunk whose *text* changed
-        while its id stayed the same; fine for a corpus that only changes
-        via a new deploy, not a substitute for real content-hash tracking."""
+        set of chunk_ids AND they were embedded with the current
+        EMBED_PROVIDER/EMBED_MODEL. With a real embeddings API (not free
+        local Ollama) behind this, re-embedding the whole corpus on every
+        Cloud Run cold start -- which happens often once it scales to zero
+        on low traffic -- would mean paying OpenAI again for work already
+        done and sitting untouched in Supabase. The model check matters
+        because two different embedding models can share a dimension (e.g.
+        nomic-embed-text and all-mpnet-base-v2 are both 768-dim) without
+        their vectors being comparable -- skipping on chunk_ids alone would
+        silently compare new-model query vectors against stale old-model
+        chunk vectors. Doesn't detect a chunk whose *text* changed while its
+        id stayed the same; fine for a corpus that only changes via a new
+        deploy, not a substitute for real content-hash tracking."""
+        current_model = f"{EMBED_PROVIDER}:{EMBED_MODEL}"
         with self.conn.cursor() as cur:
             cur.execute("SELECT chunk_id FROM chunks")
             existing_ids = {row[0] for row in cur.fetchall()}
-        if existing_ids == {c.chunk_id for c in chunks}:
+        if existing_ids == {c.chunk_id for c in chunks} and self._stored_embed_model() == current_model:
             return
 
         with self.conn.cursor() as cur:
@@ -56,6 +72,12 @@ class PgVectorStore:
                         "INSERT INTO chunks (chunk_id, doc_id, text, embedding) VALUES (%s, %s, %s, %s)",
                         (chunk.chunk_id, chunk.doc_id, chunk.text, vec),
                     )
+        with self.conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO embedding_meta (key, value) VALUES ('embed_model', %s) "
+                "ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value",
+                (current_model,),
+            )
         self.conn.commit()
 
     @traceable(name="pgvector_search")

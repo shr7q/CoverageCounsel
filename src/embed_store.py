@@ -15,8 +15,11 @@ from openai import OpenAI
 from chunking import Chunk
 
 # EMBED_PROVIDER=ollama runs fully local against Ollama's OpenAI-compatible
-# endpoint (no API key needed). Set back to "openai" to use the real
-# text-embedding-3-small endpoint once real keys are in place.
+# endpoint (no API key needed). EMBED_PROVIDER=sentence_transformers runs a
+# local model in-process (also free, no API key, and works the same way in
+# CI/Cloud Run as it does on a laptop -- unlike ollama, which needs a
+# separate server reachable over the network). Set to "openai" for the real
+# text-embedding-3-small endpoint.
 EMBED_PROVIDER = os.environ.get("EMBED_PROVIDER", "openai")
 # "localhost" means the container itself when running in Docker -- override
 # to http://host.docker.internal:11434/v1 to reach an Ollama instance
@@ -25,20 +28,36 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 
 if EMBED_PROVIDER == "ollama":
     EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "nomic-embed-text")
+elif EMBED_PROVIDER == "sentence_transformers":
+    # 768-dim, matching the pgvector schema's VECTOR(768) column -- picking
+    # a different model here means a schema migration, not just an env
+    # var flip.
+    EMBED_MODEL = os.environ.get("SENTENCE_TRANSFORMERS_EMBED_MODEL", "sentence-transformers/all-mpnet-base-v2")
 else:
     EMBED_MODEL = "text-embedding-3-small"
 
 
 class InMemoryStore:
     def __init__(self, api_key: str | None = None):
+        self._st_model = None
         if EMBED_PROVIDER == "ollama":
             self.client = OpenAI(base_url=OLLAMA_BASE_URL, api_key="ollama")
+        elif EMBED_PROVIDER == "sentence_transformers":
+            self.client = None
         else:
             self.client = OpenAI(api_key=api_key or os.environ.get("OPENAI_API_KEY"))
         self.chunks: list[Chunk] = []
         self.vectors: np.ndarray | None = None
 
     def _embed(self, texts: list[str]) -> np.ndarray:
+        if EMBED_PROVIDER == "sentence_transformers":
+            if self._st_model is None:
+                # loaded lazily so constructing a store doesn't pay the
+                # model-load cost until embedding is actually needed
+                from sentence_transformers import SentenceTransformer
+
+                self._st_model = SentenceTransformer(EMBED_MODEL)
+            return np.asarray(self._st_model.encode(texts))
         response = self.client.embeddings.create(model=EMBED_MODEL, input=texts)
         return np.array([item.embedding for item in response.data])
 

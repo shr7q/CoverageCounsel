@@ -49,3 +49,11 @@ CREATE TABLE chunks (
 );
 
 CREATE INDEX chunks_embedding_hnsw_idx ON chunks USING hnsw (embedding vector_cosine_ops);
+
+-- Tracks which EMBED_PROVIDER:EMBED_MODEL produced the vectors currently in
+-- chunks, so PgVectorStore.index() can tell "already indexed, skip
+-- re-embedding" apart from "indexed with a different, incompatible model."
+CREATE TABLE embedding_meta (
+    key TEXT PRIMARY KEY,
+    value TEXT
+);

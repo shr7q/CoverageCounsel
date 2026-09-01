@@ -1,10 +1,12 @@
 name: RAGAS evaluation gate
 
-# Runs the golden-set eval (eval/run_eval.py) against the real Claude +
-# OpenAI embeddings stack -- not the local Ollama setup used in day-to-day
-# dev, since a hosted runner can't reasonably run a local LLM plus the
-# cross-encoder reranker plus RAGAS's own scoring calls in CI time. Requires
-# ANTHROPIC_API_KEY and OPENAI_API_KEY as repository secrets.
+# Runs the golden-set eval (eval/run_eval.py) against real Claude for
+# generation -- not the local Ollama setup used in day-to-day dev, since a
+# hosted runner can't reasonably run a local LLM in CI time. Embeddings run
+# locally in-process (sentence_transformers) rather than through a hosted
+# API -- free, no key, no rate limits, and the cross-encoder reranker
+# already pulls in the same library. Requires ANTHROPIC_API_KEY as a
+# repository secret.
 #
 # Fails the build if mean faithfulness drops below the threshold in
 # eval/run_eval.py -- e.g. reverting to dense-only retrieval or breaking the
@@ -22,9 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       LLM_PROVIDER: anthropic
-      EMBED_PROVIDER: openai
+      EMBED_PROVIDER: sentence_transformers
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
