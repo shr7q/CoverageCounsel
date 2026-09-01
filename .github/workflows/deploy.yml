@@ -1,0 +1,66 @@
+name: Deploy to Cloud Run
+
+# Weeks 9-10: builds the Dockerfile image and deploys it to Google Cloud Run.
+# Gated on the eval workflow (eval.yml) actually passing on main -- this is
+# the literal "CI/CD: eval suite gates deploy on merge to main" plan item.
+# A regression that fails the RAGAS faithfulness/answer_relevancy thresholds
+# blocks the deploy from ever running, not just the merge.
+#
+# Dormant until:
+#   1. This repo is pushed to GitHub (local-only right now, by design --
+#      see the Week 7 conversation about sequencing that decision)
+#   2. A Google Cloud project exists with Cloud Run + Artifact Registry
+#      enabled, and a service account key is stored as the GCP_SA_KEY secret
+#      (Workload Identity Federation is the more modern, keyless way to do
+#      this auth step -- worth switching to once the project is live, a
+#      service account JSON key is the simpler one to set up and explain
+#      first)
+#   3. Repository secrets are set: GCP_PROJECT_ID, GCP_SA_KEY,
+#      ANTHROPIC_API_KEY, OPENAI_API_KEY, DATABASE_URL (a hosted Postgres
+#      with pgvector -- Supabase or Neon, not this laptop's Docker
+#      container), LANGSMITH_API_KEY
+
+on:
+  workflow_run:
+    workflows: ["RAGAS evaluation gate"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch: {}
+
+env:
+  GCP_REGION: us-central1
+  SERVICE_NAME: healthcare-rag-api
+  IMAGE: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/healthcare-rag/api
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and push image
+        run: |
+          docker build -t ${{ env.IMAGE }}:${{ github.sha }} -t ${{ env.IMAGE }}:latest .
+          docker push ${{ env.IMAGE }}:${{ github.sha }}
+          docker push ${{ env.IMAGE }}:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.IMAGE }}:${{ github.sha }} \
+            --region ${{ env.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars EMBED_PROVIDER=openai,LLM_PROVIDER=anthropic,RETRIEVAL_MODE=hybrid,VECTOR_STORE=pgvector,RAG_DATA_DIR=real_docs,LANGSMITH_TRACING=true,LANGSMITH_PROJECT=healthcare-rag \
+            --set-secrets ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,OPENAI_API_KEY=OPENAI_API_KEY:latest,DATABASE_URL=DATABASE_URL:latest,LANGSMITH_API_KEY=LANGSMITH_API_KEY:latest
