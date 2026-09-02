@@ -102,4 +102,4 @@ jobs:
             --memory 2Gi \
             --cpu 2 \
             --timeout 300 \
-            --set-env-vars "EMBED_PROVIDER=sentence_transformers,LLM_PROVIDER=anthropic,RETRIEVAL_MODE=hybrid,VECTOR_STORE=pgvector,RAG_DATA_DIR=real_docs,LANGSMITH_TRACING=true,LANGSMITH_PROJECT=healthcare-rag,ALLOWED_ORIGINS=https://coverage-counsel.vercel.app,ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY,DATABASE_URL=$DATABASE_URL,LANGSMITH_API_KEY=$LANGSMITH_API_KEY"
+            --set-env-vars "EMBED_PROVIDER=sentence_transformers,LLM_PROVIDER=anthropic,RETRIEVAL_MODE=hybrid,VECTOR_STORE=pgvector,RAG_DATA_DIR=real_docs,LANGSMITH_TRACING=true,LANGSMITH_PROJECT=healthcare-rag,ALLOWED_ORIGINS=https://coverage-counsel.vercel.app,CLERK_ISSUER=https://tolerant-rattler-2980.clerk.accounts.dev,ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY,DATABASE_URL=$DATABASE_URL,LANGSMITH_API_KEY=$LANGSMITH_API_KEY"
