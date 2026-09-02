@@ -21,10 +21,23 @@ name: Deploy to Cloud Run
 #      needed, see embed_store.py)
 
 on:
+  # RAG-quality-affecting changes: wait for eval.yml to pass first (see its
+  # path filter -- this is the actual "eval gates deploy" relationship).
   workflow_run:
     workflows: ["RAGAS evaluation gate"]
     types: [completed]
     branches: [main]
+  # Infra-only changes: deploy them directly, since eval.yml's path filter
+  # means it won't even run for these and the workflow_run trigger above
+  # would never fire -- these files change how the service runs, not what
+  # it answers, so re-running the (expensive, real-Claude-calls) eval gate
+  # would just burn API credits validating something it can't detect.
+  push:
+    branches: [main]
+    paths:
+      - "Dockerfile"
+      - "requirements-api.txt"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch: {}
 
 permissions:
@@ -40,7 +53,7 @@ env:
 
 jobs:
   deploy:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

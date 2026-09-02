@@ -11,12 +11,30 @@ name: RAGAS evaluation gate
 # Fails the build if mean faithfulness drops below the threshold in
 # eval/run_eval.py -- e.g. reverting to dense-only retrieval or breaking the
 # reranker should trip this gate.
+#
+# Scoped to paths that actually affect answer quality. This runs ~300-500
+# real Claude calls per invocation (42 questions x several pipeline calls
+# each, plus RAGAS's own faithfulness/answer_relevancy scoring calls) -- a
+# real cost that a Dockerfile tweak, a GCP auth fix, or a frontend change
+# has no business re-triggering. Learned this the expensive way: five
+# unrelated infra commits in a row each re-ran the full suite before this
+# filter existed.
 
 on:
   push:
     branches: [main]
+    paths:
+      - "src/**"
+      - "eval/**"
+      - "db/schema.sql"
+      - "requirements.txt"
   pull_request:
     branches: [main]
+    paths:
+      - "src/**"
+      - "eval/**"
+      - "db/schema.sql"
+      - "requirements.txt"
   workflow_dispatch: {}
 
 jobs:
