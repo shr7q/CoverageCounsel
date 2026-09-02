@@ -27,16 +27,23 @@ on:
     workflows: ["RAGAS evaluation gate"]
     types: [completed]
     branches: [main]
-  # Infra-only changes: deploy them directly, since eval.yml's path filter
-  # means it won't even run for these and the workflow_run trigger above
-  # would never fire -- these files change how the service runs, not what
-  # it answers, so re-running the (expensive, real-Claude-calls) eval gate
-  # would just burn API credits validating something it can't detect.
+  # Serving-layer/infra changes: deploy them directly. eval.yml's path
+  # filter deliberately excludes api.py/db.py/auth.py/query.py (see its
+  # comment) since eval/run_eval.py never imports them, so the workflow_run
+  # trigger above would never fire for a change confined to these -- they
+  # affect how the service runs and who it lets through, not what it
+  # answers, so gating them on the (expensive, real-Claude-calls) eval
+  # suite would burn API credits validating something it structurally
+  # can't detect.
   push:
     branches: [main]
     paths:
       - "Dockerfile"
       - "requirements-api.txt"
+      - "src/api.py"
+      - "src/db.py"
+      - "src/auth.py"
+      - "src/query.py"
       - ".github/workflows/deploy.yml"
   workflow_dispatch: {}
 
