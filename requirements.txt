@@ -1,3 +1,5 @@
+# Full dependency set for local dev, the CLI, and the eval suite. The
+# deployed API container installs the smaller requirements-api.txt instead.
 anthropic>=0.40.0
 openai>=1.50.0
 numpy>=1.26.0

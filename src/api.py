@@ -1,20 +1,18 @@
 """
-Week 9: HTTP API wrapping the pipeline, so it can actually be deployed --
-Cloud Run (and every other target the plan considered) runs a container
-that serves HTTP, not a CLI script you'd SSH in to invoke.
+HTTP API wrapping the RAG pipeline for deployment (Cloud Run serves a
+container that speaks HTTP, not a CLI script). Exposes POST /query and
+GET /health.
 
-The index is built once at process startup (chunking + embedding + BM25 are
-all static over the corpus) and reused across requests, rather than rebuilt
-per-request.
+The index (chunking + embedding + BM25, all static over the corpus) is
+built once at process startup and reused across requests rather than
+rebuilt per request.
 
-Week 10: real Clerk auth replaces the as_user request field this endpoint
-used to trust -- that let any caller simply claim to be bob_admin
-(compliance_admin) with zero proof, which is a fine trust model for the
-CLI's local operator but not for a public HTTP endpoint. An unauthenticated
-request is no longer treated as unrestricted either (it was, before this
-week, since "logged in vs not" wasn't a real distinction yet) -- it now
-gets the same standard-only scope as a freshly-provisioned Clerk account,
-so skipping login is never a way to see more, only to see less.
+Identity is a verified Clerk JWT (see auth.py), not a client-supplied
+username -- a caller can't simply claim to be an admin the way the CLI's
+`--as-user` flag allows, which is an acceptable trust model for a trusted
+local operator but not for a public endpoint. An unauthenticated request
+gets the same standard-only scope as a freshly-provisioned Clerk account
+(ANONYMOUS_USER below), so skipping login is never a way to see more.
 
 Run locally:
     uvicorn api:app --reload --port 8080

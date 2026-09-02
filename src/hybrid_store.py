@@ -3,23 +3,21 @@ Hybrid retrieval: BM25 sparse search + dense embedding search, combined via
 Reciprocal Rank Fusion (RRF), then narrowed to the final top_k with a
 cross-encoder reranking pass.
 
-Week 3 addition -- Week 2 fixed chunking, but even with clean, intact chunks
-the dense-only top-4 search still missed the single most specific supporting
-chunk on a real test question (the knee-replacement chunk that explicitly
-lists "supervised physical therapy" never made the cut). BM25 catches exact
-keyword overlap that a single embedding's cosine similarity can underweight;
-the cross-encoder then re-scores each (query, chunk) pair directly instead of
-relying on one pre-computed vector per chunk.
+Dense search alone can miss a chunk with strong exact-keyword overlap if its
+embedding just isn't close enough in vector space -- BM25 catches that case
+directly. RRF merges the two ranked lists without needing the two systems'
+raw scores to be on comparable scales. The cross-encoder then re-scores each
+(query, chunk) pair directly, which is strictly more informative than
+ranking by a single pre-computed vector per chunk, at the cost of being too
+slow to run over the whole corpus -- hence running it only over the fused
+top candidates.
 
-Week 8: BM25 scoring and reranking are pulled into their own @traceable
-methods (dense search already traces itself, see embed_store.py) so a
-LangSmith trace shows each retrieval stage's own scores as a distinct
-nested span, not just the final fused-and-reranked output.
-
-Week 9: the dense backend is swappable (VECTOR_STORE=memory|pgvector) --
-BM25 stays in-memory regardless, since migrating it to Postgres full-text
-search is a separate, bigger change than "give the dense vectors a real
-database," which is what this week's plan item actually asked for.
+The dense backend is swappable (VECTOR_STORE=memory|pgvector); BM25 always
+stays in-memory regardless, since a Postgres full-text-search port is a
+separate concern from which store holds the dense vectors. BM25 scoring and
+reranking each run as their own @traceable call (dense search traces itself,
+see embed_store.py) so a LangSmith trace shows every retrieval stage's own
+scores as a distinct span, not just the final fused-and-reranked output.
 """
 
 import os
@@ -34,9 +32,6 @@ from embed_store import InMemoryStore
 
 RERANK_MODEL = os.environ.get("RERANK_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2")
 RRF_K = 60  # standard RRF damping constant
-# pgvector is the default -- Postgres has been a hard dependency since Week 6's
-# RBAC anyway. VECTOR_STORE=memory reproduces the original walking-skeleton
-# store for comparison, or for running without Docker up.
 VECTOR_STORE = os.environ.get("VECTOR_STORE", "pgvector")
 
 
@@ -63,8 +58,8 @@ class HybridStore:
 
     @property
     def reranker(self) -> CrossEncoder:
-        # loaded lazily so indexing doesn't pay the model-load cost if
-        # search() never gets called (e.g. dense-only comparison runs)
+        # Lazy load: indexing shouldn't pay the model-load cost if search()
+        # never gets called (e.g. dense-only comparison runs).
         if self._reranker is None:
             self._reranker = CrossEncoder(RERANK_MODEL)
         return self._reranker

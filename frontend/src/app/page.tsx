@@ -1,3 +1,12 @@
+/**
+ * CoverageCounsel's single page: a question box that calls the FastAPI
+ * backend's POST /query and renders the grounded answer, its inline
+ * citations, sub-questions (when the question was decomposed), and any
+ * phantom-citation or faithfulness warnings the backend's verify step
+ * flagged. Signed-in users (via Clerk) get a Bearer token attached to the
+ * request; signed-out users send none and are scoped server-side to
+ * standard access rather than being denied.
+ */
 "use client";
 
 import { Show, SignInButton, UserButton, useAuth } from "@clerk/nextjs";
@@ -42,9 +51,8 @@ export default function Home() {
     setResult(null);
     try {
       // Signed-in: attach a real, verifiable Clerk session token. Signed
-      // out: no Authorization header at all -- the API scopes that to
-      // standard access on its own (see api.py's ANONYMOUS_USER), it isn't
-      // something the client claims.
+      // out: no Authorization header -- the API decides the access scope
+      // for that case itself (see api.py's ANONYMOUS_USER).
       const token = await getToken();
       const res = await fetch(`${API_URL}/query`, {
         method: "POST",

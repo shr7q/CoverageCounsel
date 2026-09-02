@@ -1,3 +1,10 @@
+/*
+ * Global styles: Tailwind v4 (CSS-native config, no tailwind.config.js) plus
+ * the typography plugin for the rendered-markdown answer. Defines the color
+ * tokens `@theme inline` maps to Tailwind utilities, a light/dark palette
+ * switched via prefers-color-scheme, the page's gradient background, and
+ * the loading-dots / fade-up animations used in page.tsx.
+ */
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 

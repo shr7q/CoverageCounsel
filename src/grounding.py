@@ -12,9 +12,8 @@ Two independent layers, deliberately kept separate:
 
 2. Faithfulness check (a second LLM call). For each citation, ask whether
    the cited excerpt's text actually supports the claim attached to it.
-   This check is itself an LLM call and can be wrong -- CLAUDE.md's "eval
-   circularity" edge case applies here directly. Treat a flagged claim as a
-   lead to spot-check by hand, not as ground truth.
+   This check is itself an LLM call and can be wrong. Treat a flagged claim
+   as a lead to spot-check by hand, not as ground truth.
 """
 
 import json

@@ -1,3 +1,8 @@
+/**
+ * Root layout: loads fonts, sets page metadata, and wraps the app in
+ * ClerkProvider so page.tsx's auth components (Show, SignInButton,
+ * UserButton, useAuth) have Clerk context available.
+ */
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";

@@ -1,3 +1,5 @@
+# Local dev Postgres with pgvector preinstalled, auto-initialized from
+# db/schema.sql and db/seed.sql on first start. Run: docker compose up -d
 services:
   postgres:
     image: pgvector/pgvector:pg16

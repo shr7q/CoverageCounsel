@@ -5,26 +5,22 @@ name: RAGAS evaluation gate
 # hosted runner can't reasonably run a local LLM in CI time. Embeddings run
 # locally in-process (sentence_transformers) rather than through a hosted
 # API -- free, no key, no rate limits, and the cross-encoder reranker
-# already pulls in the same library. Requires ANTHROPIC_API_KEY as a
-# repository secret.
+# already pulls in the same library. Requires ANTHROPIC_API_KEY and
+# DATABASE_URL as repository secrets.
 #
-# Fails the build if mean faithfulness drops below the threshold in
-# eval/run_eval.py -- e.g. reverting to dense-only retrieval or breaking the
-# reranker should trip this gate.
+# Fails the build if mean faithfulness or mean answer_relevancy drops below
+# the thresholds in eval/run_eval.py -- e.g. reverting to dense-only
+# retrieval or breaking the reranker trips this gate.
 #
 # Scoped to the exact modules eval/run_eval.py actually imports (chunking,
 # embed_store, hybrid_store, orchestrator, which pulls in llm/grounding, and
 # pgvector_store via hybrid_store) -- not all of src/**. api.py, db.py,
 # auth.py, and query.py are never imported by the eval script, directly or
-# transitively, so a change confined to those files cannot be detected by
-# re-running this suite; it would just spend ~300-500 real Claude calls
-# (42 questions x several pipeline calls, plus RAGAS's own
-# faithfulness/answer_relevancy scoring) validating nothing. Those files
-# still need deploying, though -- see deploy.yml's own direct path trigger.
-#
-# Learned the coarse-grained version of this the expensive way: five
-# unrelated infra commits in a row each re-ran the full suite before any
-# path filter existed at all.
+# transitively, so a change confined to those files can't be validated by
+# this suite; it would just spend ~300-500 real Claude calls (42 questions x
+# several pipeline calls, plus RAGAS's own scoring) checking nothing. Those
+# files still need deploying, though -- see deploy.yml's own direct path
+# trigger.
 
 on:
   push:

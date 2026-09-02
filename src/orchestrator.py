@@ -1,26 +1,26 @@
 """
-LangGraph orchestration: routes a question to either a direct single-lookup
-answer or, for genuinely multi-part questions, decomposes it into
-sub-questions, retrieves separately for each, and synthesizes one final
-answer from all of them.
+LangGraph orchestration for the query pipeline: routes a question to either
+a direct single-lookup answer or, for genuinely multi-part questions,
+decomposes it into sub-questions, retrieves separately for each, and
+synthesizes one final answer from all of them.
 
-Week 4 addition. Hybrid retrieval (Week 3) embeds/searches with one vector
-per question. If a question actually bundles two distinct topics, that one
+Decomposition exists because retrieval embeds/searches with one vector per
+question -- if a question actually bundles two distinct topics, that one
 embedding sits between both in vector space and top-k retrieval can end up
-mediocre for both instead of good for either. Decomposition turns it into N
-independent retrieval problems instead of one blurred one.
+mediocre for both instead of good for either. Splitting it turns one blurred
+retrieval problem into N independent ones.
 
-Week 5 addition: both terminal paths now flow through a `verify` node before
-END, which checks every inline [chunk_id] citation the answer makes against
-what was actually retrieved (catches phantom citations for free) and runs an
-LLM faithfulness check on top (catches claims the citation doesn't actually
-support -- see grounding.py's docstring for why that check's own verdicts
-still need spot-checking).
+Both terminal paths flow through a `verify` node before END, which checks
+every inline [chunk_id] citation the answer makes against what was actually
+retrieved (catches phantom citations for free) and runs an LLM faithfulness
+check on top (catches claims the citation doesn't actually support -- see
+grounding.py's docstring for why that check's own verdicts still need
+spot-checking).
 
-Week 6 addition: state carries allowed_doc_ids, the calling user's RBAC
-scope, forwarded into every store.search() call so restricted documents are
-excluded at the retrieval layer itself -- never fetched, reranked, or put in
-front of the LLM -- rather than filtered out of the final answer afterward.
+State carries allowed_doc_ids, the calling user's RBAC scope, forwarded into
+every store.search() call so restricted documents are excluded at the
+retrieval layer itself -- never fetched, reranked, or put in front of the
+LLM -- rather than filtered out of the final answer afterward.
 
 Graph:
 
@@ -90,7 +90,7 @@ class GraphState(TypedDict):
     final_answer: str
     citation_check: dict
     faithfulness_flags: list[dict]
-    allowed_doc_ids: set[str] | None  # Week 6: RBAC scope of the asking user; None = unrestricted
+    allowed_doc_ids: set[str] | None  # RBAC scope of the asking user; None = unrestricted
 
 
 def _flatten_retrieved(retrieved: dict[str, list[tuple[Chunk, float]]]) -> list[tuple[Chunk, float]]:

@@ -1,24 +1,15 @@
 name: Deploy to Cloud Run
 
-# Weeks 9-10: builds the Dockerfile image and deploys it to Google Cloud Run.
-# Gated on the eval workflow (eval.yml) actually passing on main -- this is
-# the literal "CI/CD: eval suite gates deploy on merge to main" plan item.
-# A regression that fails the RAGAS faithfulness/answer_relevancy thresholds
-# blocks the deploy from ever running, not just the merge.
+# Builds the Dockerfile image and deploys it to Google Cloud Run (project
+# project-66080af2-c02c-434f-917, service account github-deploy, keyless
+# auth via Workload Identity Federation). Gated on the eval workflow
+# (eval.yml) actually passing on main: a regression that fails the RAGAS
+# faithfulness/answer_relevancy thresholds blocks the deploy from ever
+# running, not just the merge.
 #
-# Dormant until:
-#   1. This repo is pushed to GitHub -- done (github.com/shr7q/CoverageCounsel)
-#   2. A Google Cloud project exists with Cloud Run + Artifact Registry
-#      enabled (project ID: project-66080af2-c02c-434f-917), a
-#      github-deploy service account, and Workload Identity Federation set
-#      up between them (keyless -- no long-lived JSON key to leak)
-#   3. Repository secrets are set: GCP_WORKLOAD_IDENTITY_PROVIDER (the
-#      provider's full resource name, ".../workloadIdentityPools/
-#      github-actions-pool/providers/<provider-id>"), ANTHROPIC_API_KEY,
-#      DATABASE_URL (a hosted Postgres with pgvector -- Supabase or Neon,
-#      not this laptop's Docker container), LANGSMITH_API_KEY
-#      (embeddings run locally via sentence_transformers -- no OpenAI key
-#      needed, see embed_store.py)
+# Repository secrets required: GCP_WORKLOAD_IDENTITY_PROVIDER,
+# ANTHROPIC_API_KEY, DATABASE_URL (hosted Postgres with pgvector --
+# Supabase), LANGSMITH_API_KEY.
 
 on:
   # RAG-quality-affecting changes: wait for eval.yml to pass first (see its

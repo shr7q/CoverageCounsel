@@ -1,18 +1,17 @@
 """
-Shared LLM generation call. Pulled out of query.py in Week 4 because the
-LangGraph orchestrator needs the same provider-switching generation logic in
-multiple nodes (decompose, direct-answer, synthesize), not just the one
-place query.py used it before.
+Shared LLM generation call, used by every orchestrator node (decompose,
+direct-answer, synthesize) and by grounding.py's faithfulness check, so the
+provider-switching logic lives in exactly one place.
 
 LLM_PROVIDER=ollama runs fully local against Ollama's OpenAI-compatible
-endpoint (no API key needed). Set back to "anthropic" to use real Claude once
-real keys are in place.
+endpoint (no API key needed); anything else calls real Claude via the
+Anthropic API.
 
-Week 8: @traceable here is what makes the prompt actually sent, the model,
-and token usage show up per-call in LangSmith -- LangGraph's own tracing
-covers node-to-node flow automatically, but calls made with the raw
-OpenAI/Anthropic SDKs (not LangChain's chat model wrappers) aren't traced
-unless explicitly wrapped like this.
+@traceable here is what makes the prompt actually sent, the model, and
+token usage show up per-call in LangSmith -- LangGraph's own tracing covers
+node-to-node flow automatically, but calls made with the raw OpenAI/
+Anthropic SDKs (not LangChain's chat model wrappers) aren't traced unless
+explicitly wrapped like this.
 """
 
 import os
@@ -24,7 +23,7 @@ from openai import OpenAI
 
 LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "anthropic")
 OLLAMA_MODEL = os.environ.get("OLLAMA_LLM_MODEL", "llama3.1:8b")
-# see embed_store.py's OLLAMA_BASE_URL comment -- same reasoning applies here
+# See embed_store.py's OLLAMA_BASE_URL comment -- same reasoning applies here.
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 
 

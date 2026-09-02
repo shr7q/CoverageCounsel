@@ -1,13 +1,13 @@
 """
-Week 9: pgvector-backed dense store, replacing the in-memory numpy array
-from the walking skeleton (embed_store.InMemoryStore) now that there's a
-real database to put it in anyway (Week 6 brought Postgres in for RBAC).
+pgvector-backed dense vector store: the production dense retrieval backend,
+storing chunk embeddings in Postgres instead of an in-memory numpy array.
 
-Same interface as InMemoryStore -- .index(chunks) / .search(query, top_k,
-allowed_doc_ids) -- so HybridStore can use either as its dense backend
-without changing anything else. Embedding itself is delegated to an
-InMemoryStore instance rather than duplicated, since the OpenAI/Ollama
-provider-switching logic already lives there.
+Exposes the same interface as InMemoryStore -- .index(chunks) /
+.search(query, top_k, allowed_doc_ids) -- so HybridStore can use either as
+its dense backend without changing anything else. Embedding itself is
+delegated to an InMemoryStore instance rather than duplicated, since the
+OpenAI/Ollama/sentence_transformers provider-switching logic already lives
+there.
 """
 
 import os

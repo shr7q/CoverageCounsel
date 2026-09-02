@@ -1,8 +1,8 @@
 """
-Week 1 real-data swap: pull real CMS coverage determinations and Medicare
-Benefit Policy Manual sections out of the bulk downloads in data/ and write
-them as plain-text docs in data/real_docs/, alongside (not replacing) the
-synthetic data/sample_docs/ set.
+One-time extraction script: pulls real CMS coverage determinations and
+Medicare Benefit Policy Manual sections out of the bulk downloads in data/
+and writes them as plain-text docs in data/real_docs/, alongside (not
+replacing) the synthetic data/sample_docs/ set.
 
 Sources (already present in data/):
   - ncd_csv.zip           -> extracted to data/_extract/ncd/ncd_trkg.csv

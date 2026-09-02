@@ -1,5 +1,5 @@
-# Week 9: containerized API service. Only what api.py's serving path needs
-# (see requirements-api.txt) -- eval tooling and the one-time CMS extraction
+# Containerized API service. Only what api.py's serving path needs (see
+# requirements-api.txt) -- eval tooling and the one-time CMS extraction
 # script have their own dependencies and don't belong in this image.
 
 FROM python:3.12-slim

@@ -1,13 +1,17 @@
 """
-The walking skeleton. Run this to prove the full loop works:
+CLI entry point for the RAG pipeline, and the shared query logic api.py's
+HTTP endpoint also calls.
 
-    question -> retrieve chunks -> stuff into prompt -> get an answer
-
-No reranking, no query decomposition, no citations parsing, no auth. Those
-come later, once you've seen where this naive version breaks.
+Builds the index (chunk -> embed -> index) once, then answers a question
+either through the full LangGraph pipeline (decomposition, hybrid
+retrieval, grounded generation, citation/faithfulness verification -- the
+default) or through a bare single-shot retrieve-then-generate path with no
+decomposition or verification, kept as a baseline for direct before/after
+comparison against the full pipeline.
 
 Usage:
     python src/query.py "Is a total knee replacement covered without physical therapy first?"
+    python src/query.py "..." --as-user alice_clinician
 """
 
 import argparse
@@ -27,18 +31,18 @@ from hybrid_store import HybridStore
 from llm import generate
 from orchestrator import build_graph
 
-# RETRIEVAL_MODE=dense reproduces the Week 1/2 dense-only baseline, for
-# direct before/after comparison against the Week 3 hybrid+rerank pipeline.
+# RETRIEVAL_MODE=dense uses dense-only search, for before/after comparison
+# against the default hybrid (BM25 + dense + rerank) pipeline.
 RETRIEVAL_MODE = os.environ.get("RETRIEVAL_MODE", "hybrid")
 
-# USE_ORCHESTRATOR=false reproduces the pre-Week-4 single-shot baseline (one
-# retrieval call, no decomposition), for direct before/after comparison
-# against the LangGraph decompose-and-synthesize pipeline.
+# USE_ORCHESTRATOR=false skips the LangGraph pipeline (one retrieval call,
+# no decomposition, no verification), for before/after comparison against
+# the default decompose-and-synthesize-and-verify pipeline.
 USE_ORCHESTRATOR = os.environ.get("USE_ORCHESTRATOR", "true").lower() == "true"
 
-# RAG_DATA_DIR=sample_docs reproduces the original synthetic control set;
-# real_docs (the real CMS corpus, Week 1) is the default for anything meant
-# to actually answer questions.
+# RAG_DATA_DIR=sample_docs uses the synthetic control set; real_docs (the
+# real CMS corpus) is the default for anything meant to actually answer
+# questions.
 DATA_DIR = os.path.join(
     os.path.dirname(__file__), "..", "data", os.environ.get("RAG_DATA_DIR", "real_docs")
 )
@@ -88,13 +92,13 @@ def run_orchestrated_query(store: InMemoryStore, question: str, user: dict | Non
     endpoint build their own presentation on top of this shared call so the
     actual pipeline logic (and query logging) isn't duplicated between them.
 
-    user, when given, scopes retrieval to that user's RBAC access_levels
-    (Week 6) -- resolved from Postgres via db.get_user(), enforced inside
-    store.search() itself, not filtered from the answer afterward. A user
-    dict with id=None (Week 10: an unauthenticated web request, resolved to
-    the anonymous/standard scope rather than a real Postgres row) still
-    scopes retrieval normally but is skipped in query_log -- there's no
-    real user row to attach the log entry to."""
+    user, when given, scopes retrieval to that user's RBAC access_levels --
+    resolved from Postgres, enforced inside store.search() itself, not
+    filtered from the answer afterward. A user dict with id=None (an
+    unauthenticated web request, resolved to the anonymous/standard scope
+    rather than a real Postgres row) still scopes retrieval normally but is
+    skipped in query_log -- there's no real user row to attach the log
+    entry to."""
     allowed_doc_ids = db.get_allowed_doc_ids(user["access_levels"]) if user else None
 
     graph = build_graph(store)
@@ -157,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument("question")
     parser.add_argument(
         "--as-user",
-        help="username from the Postgres users table (Week 6 RBAC) -- omit to run unrestricted",
+        help="username from the Postgres users table -- omit to run unrestricted",
     )
     args = parser.parse_args()
 

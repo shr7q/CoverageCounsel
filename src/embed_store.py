@@ -1,11 +1,20 @@
 """
-Minimal in-memory vector store.
+Embedding provider and in-memory dense vector store.
 
-No pgvector, no Qdrant -- just a numpy array and cosine similarity. This is
-intentional: the point of the walking skeleton is to prove the retrieval loop
-works before you spend time standing up real infrastructure. Swap this for
-pgvector once you've moved to the access-control phase and need a real
-database anyway.
+InMemoryStore embeds text and holds the resulting vectors in a plain numpy
+array, ranking by cosine similarity -- no external vector database. It plays
+two roles in this codebase: it's the dense backend HybridStore uses when
+VECTOR_STORE=memory (a from-scratch comparison baseline, or for running
+without Postgres up), and every embedding call (including pgvector's) goes
+through the `_embed` provider-switching logic defined here, so it only
+exists in one place.
+
+EMBED_PROVIDER selects where embeddings come from: "ollama" runs fully local
+against Ollama's OpenAI-compatible endpoint (no API key needed);
+"sentence_transformers" runs a local model in-process (also free, no API
+key, and -- unlike Ollama -- works identically in CI/Cloud Run and on a
+laptop since it needs no separate server); anything else uses the real
+OpenAI embeddings endpoint.
 """
 
 import os
@@ -14,12 +23,6 @@ from langsmith import traceable
 from openai import OpenAI
 from chunking import Chunk
 
-# EMBED_PROVIDER=ollama runs fully local against Ollama's OpenAI-compatible
-# endpoint (no API key needed). EMBED_PROVIDER=sentence_transformers runs a
-# local model in-process (also free, no API key, and works the same way in
-# CI/Cloud Run as it does on a laptop -- unlike ollama, which needs a
-# separate server reachable over the network). Set to "openai" for the real
-# text-embedding-3-small endpoint.
 EMBED_PROVIDER = os.environ.get("EMBED_PROVIDER", "openai")
 # "localhost" means the container itself when running in Docker -- override
 # to http://host.docker.internal:11434/v1 to reach an Ollama instance
@@ -52,8 +55,8 @@ class InMemoryStore:
     def _embed(self, texts: list[str]) -> np.ndarray:
         if EMBED_PROVIDER == "sentence_transformers":
             if self._st_model is None:
-                # loaded lazily so constructing a store doesn't pay the
-                # model-load cost until embedding is actually needed
+                # Lazy load: constructing a store shouldn't pay the
+                # model-load cost until embedding is actually needed.
                 from sentence_transformers import SentenceTransformer
 
                 self._st_model = SentenceTransformer(EMBED_MODEL)

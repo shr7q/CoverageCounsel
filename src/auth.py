@@ -1,9 +1,6 @@
 """
-Week 10: verifies Clerk-issued session JWTs so the public API resolves a
-real, provable identity instead of trusting a client-supplied username --
-the old as_user request field let any caller simply claim to be
-bob_admin (compliance_admin) with zero proof, which is fine for a CLI
-trusted local operator but not for a public HTTP endpoint.
+Verifies Clerk-issued session JWTs so the public API resolves a real,
+provable identity instead of trusting a client-supplied username.
 
 CLERK_ISSUER is the Clerk instance's Frontend API URL, e.g.
 "https://your-app.clerk.accounts.dev" (Clerk dashboard -> API Keys). The

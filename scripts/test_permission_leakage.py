@@ -1,5 +1,6 @@
 """
-Week 6 permission-leakage test.
+Permission-leakage test: proves RBAC is enforced at the retrieval layer,
+not just in whatever the LLM chooses to say.
 
 This does NOT check the LLM's final answer text -- a restricted user could
 still leak data if the model happened not to mention it while the forbidden

@@ -1,10 +1,13 @@
+/**
+ * Runs Clerk's middleware on every route so auth context (the signed-in
+ * user, if any) is available to the app. Named proxy.ts, not middleware.ts,
+ * because Next.js 16 renamed the "Middleware" file convention to "Proxy"
+ * (functionality is unchanged). The app itself stays fully public --
+ * signed-out users can still use it, scoped to standard access server-side
+ * (see api.py's ANONYMOUS_USER).
+ */
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-// Next.js 16 renamed "Middleware" to "Proxy" (file convention only --
-// functionality is unchanged). This just needs to run on every route so
-// Clerk can attach auth context; the app itself stays fully public
-// (SignedOut users can still use it, scoped to standard access -- see
-// api.py's ANONYMOUS_USER).
 export default clerkMiddleware();
 
 export const config = {

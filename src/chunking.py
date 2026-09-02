@@ -1,20 +1,19 @@
 """
-Structure-aware chunker.
+Structure-aware document chunker.
 
-Replaces the original fixed-size chunker, which was confirmed (Week 1, real
-CMS data) to split a chunk mid-word right through the one clause that
-answered a real test question -- the chunk never made it into the top-k
-retrieved results and the model confidently answered from chunks that don't
-address the question at all.
+Loads the .txt policy documents in a data directory and splits each one into
+retrieval-sized chunks, splitting on real section/heading boundaries instead
+of a fixed character count -- a fixed-size split can cut a chunk mid-word,
+mid-clause, straight through the one sentence that answers a question, which
+knocks it out of the top-k retrieved results entirely.
 
-Splits on section/heading boundaries first: the synthetic sample docs'
-"Section N. Title" headers, the Benefit Policy Manual's "Section N.N - Title"
-headers, the field labels this project's own CMS extraction script writes
-(e.g. "Indications and Limitations of Coverage"), and the lettered/numbered
-subheadings CMS regulatory text itself uses ("A. Durability", "1. Content:").
-A section is only sub-chunked if it's still too long after that split, and
-even then the split happens on paragraph, then sentence boundaries -- never
-mid-word/mid-sentence.
+Heading detection recognizes: the synthetic sample docs' "Section N. Title"
+headers, the Benefit Policy Manual's "Section N.N - Title" headers, the field
+labels this project's own CMS extraction script writes (e.g. "Indications
+and Limitations of Coverage"), and the lettered/numbered subheadings CMS
+regulatory text itself uses ("A. Durability", "1. Content:"). A section is
+only split further if it's still too long after that, and even then the
+split happens on paragraph, then sentence boundaries -- never mid-word.
 """
 
 import os
@@ -130,7 +129,7 @@ def chunk_all_documents(data_dir: str, max_size: int = 800) -> list[Chunk]:
 
 
 if __name__ == "__main__":
-    # quick sanity check: run `python src/chunking.py` from the repo root
+    # Sanity check: run `python src/chunking.py` from the repo root.
     chunks = chunk_all_documents("data/sample_docs")
     print(f"Loaded {len(chunks)} chunks from data/sample_docs")
     for c in chunks[:3]:

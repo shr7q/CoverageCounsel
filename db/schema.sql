@@ -1,7 +1,8 @@
--- Week 6: access control schema.
+-- Schema for users/roles/RBAC, document metadata, query auditing, and the
+-- pgvector-backed chunk store.
 --
--- RBAC boundary chosen to map onto a real distinction in the corpus rather
--- than an invented one: DME/oxygen equipment billing is one of CMS's most
+-- The RBAC boundary maps onto a real distinction in the corpus rather than
+-- an invented one: DME/oxygen equipment billing is one of CMS's most
 -- historically fraud-prone benefit categories, so its detailed coverage and
 -- coding criteria (lcd_33797_oxygen_and_oxygen_equipment.txt) are marked
 -- 'restricted' -- visible only to the compliance_admin role. Everything else
@@ -17,7 +18,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
     role_id INTEGER NOT NULL REFERENCES roles(id),
-    -- Week 10: real Clerk accounts, provisioned just-in-time on first
+    -- Real Clerk accounts are provisioned just-in-time on first
     -- authenticated request rather than seeded like alice_clinician/
     -- bob_admin. Nullable because those two demo/CLI accounts have none.
     clerk_user_id TEXT UNIQUE
@@ -38,11 +39,11 @@ CREATE TABLE query_log (
     queried_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Week 9: real vector store, replacing the in-memory numpy array from the
--- walking skeleton. 768 dims matches nomic-embed-text (local Ollama dev);
--- re-embedding + a new column is required if the embedding model ever
--- changes dimension (e.g. OpenAI text-embedding-3-small is 1536) -- that's
--- an accepted migration cost, not something worth engineering around now.
+-- 768 dims matches nomic-embed-text (local Ollama dev) and
+-- all-mpnet-base-v2 (production). Re-embedding + a new column is required
+-- if the embedding model ever changes dimension (e.g. OpenAI
+-- text-embedding-3-small is 1536) -- an accepted migration cost, not
+-- something worth engineering around now.
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE chunks (

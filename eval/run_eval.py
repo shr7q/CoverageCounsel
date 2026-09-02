@@ -1,6 +1,6 @@
 """
-Week 7: run the golden set through the real production pipeline (the same
-LangGraph orchestrator query.py uses) and score it with RAGAS.
+Runs the golden set through the real production pipeline (the same
+LangGraph orchestrator query.py uses) and scores it with RAGAS.
 
 Metrics: faithfulness (does the answer's claims trace back to the retrieved
 context?), answer_relevancy (does the answer actually address the question?),
@@ -10,8 +10,8 @@ golden set's reference answer?).
 This is the CI gate: run_eval.py exits non-zero if mean faithfulness or mean
 answer_relevancy drops below its threshold, so a regression (e.g. reverting
 to dense-only retrieval, or breaking the reranker) fails the build instead of
-silently shipping worse answers. (Gating on faithfulness alone wasn't enough
--- see the ANSWER_RELEVANCY_THRESHOLD comment below for what that missed.)
+silently shipping worse answers. Gating on faithfulness alone isn't enough --
+see the ANSWER_RELEVANCY_THRESHOLD comment below for what that missed.
 
 Usage (from repo root):
     python eval/run_eval.py                  # full golden set
@@ -55,11 +55,11 @@ from orchestrator import build_graph
 
 FAITHFULNESS_THRESHOLD = 0.7
 # Discovered empirically: reverting hybrid+rerank to dense-only retrieval
-# (the Week 3 regression this gate exists to catch) barely moved
-# faithfulness (0.708 -> 0.755, within local-model run-to-run noise on 42
-# questions) but dropped answer_relevancy substantially (0.716 -> 0.605).
-# Faithfulness alone isn't a reliable enough signal for a retrieval-quality
-# regression -- gate on both.
+# (the regression this gate exists to catch) barely moved faithfulness
+# (0.708 -> 0.755, within local-model run-to-run noise on 42 questions) but
+# dropped answer_relevancy substantially (0.716 -> 0.605). Faithfulness
+# alone isn't a reliable enough signal for a retrieval-quality regression --
+# gate on both.
 ANSWER_RELEVANCY_THRESHOLD = 0.65
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "real_docs")
 GOLDEN_SET_PATH = os.path.join(os.path.dirname(__file__), "golden_set.json")

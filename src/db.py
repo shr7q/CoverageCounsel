@@ -1,14 +1,16 @@
 """
-Week 6: users/roles/document-metadata lookups against Postgres, backing the
-retrieval-layer RBAC enforcement in hybrid_store.py / embed_store.py.
+Users/roles/document-metadata lookups against Postgres, backing the
+retrieval-layer RBAC enforcement in hybrid_store.py / embed_store.py /
+pgvector_store.py.
 
-Week 10: real Clerk accounts (get_or_create_user_by_clerk_id) sit alongside
-the original --as-user CLI flag (get_user, by username) rather than
-replacing it -- the CLI is a trusted local operator tool, so a
-client-supplied username is fine there; the public API now requires a
-verified Clerk JWT (see auth.py) precisely because it doesn't have that
-trust boundary. The RBAC enforcement itself (filtering at the retrieval
-layer) is unchanged either way -- only how "who is asking" gets resolved.
+Two ways a caller's identity resolves to a user row: get_user() looks up a
+username directly, for the CLI's `--as-user` flag -- a trusted local
+operator tool, where a client-supplied username is an acceptable trust
+model. get_or_create_user_by_clerk_id() resolves (and just-in-time
+provisions) a real Clerk account for the public API, which requires a
+verified JWT (see auth.py) precisely because it doesn't have that trust
+boundary. Either way, the RBAC enforcement itself is unchanged -- only how
+"who is asking" gets resolved.
 """
 
 import os

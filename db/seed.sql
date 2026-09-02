@@ -1,3 +1,7 @@
+-- Seed data: the two RBAC roles, two demo/CLI accounts (one per role), and
+-- document metadata for every .txt file in data/real_docs and
+-- data/sample_docs, with lcd_33797 (oxygen equipment) marked 'restricted'.
+
 INSERT INTO roles (name, access_levels) VALUES
     ('clinician', ARRAY['standard']),
     ('compliance_admin', ARRAY['standard', 'restricted']);
