@@ -44,6 +44,17 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<QueryResponse | null>(null);
 
+  async function postQuery(q: string, token: string | null) {
+    return fetch(`${API_URL}/query`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ question: q }),
+    });
+  }
+
   async function submitQuestion(q: string) {
     if (!q.trim() || loading) return;
     setLoading(true);
@@ -54,14 +65,15 @@ export default function Home() {
       // out: no Authorization header -- the API decides the access scope
       // for that case itself (see api.py's ANONYMOUS_USER).
       const token = await getToken();
-      const res = await fetch(`${API_URL}/query`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ question: q }),
-      });
+      let res = await postQuery(q, token);
+      if (res.status === 401) {
+        // The token can expire between being fetched here and verified
+        // server-side -- e.g. a Cloud Run cold start rebuilding the index
+        // takes longer than the session token's ~60s lifetime. Retry once
+        // with a freshly minted token before surfacing an error.
+        const freshToken = await getToken({ skipCache: true });
+        res = await postQuery(q, freshToken);
+      }
       if (!res.ok) {
         const detail = await res.text();
         throw new Error(`${res.status}: ${detail}`);
