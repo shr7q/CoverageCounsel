@@ -21,6 +21,7 @@ load_dotenv()
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 import db
@@ -28,6 +29,13 @@ from query import DATA_DIR, build_index
 from query import run_orchestrated_query
 
 state: dict = {}
+
+# The frontend (Vercel) is a different origin than this API (Cloud Run), so
+# the browser enforces CORS on every request. No cookies/credentials cross
+# this boundary -- as_user is just a JSON body field -- so a wildcard is a
+# reasonable default for a public demo; ALLOWED_ORIGINS narrows it once the
+# Vercel domain is known.
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
 
 
 @asynccontextmanager
@@ -40,6 +48,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Healthcare Coverage RAG API", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
 
 
 class QueryRequest(BaseModel):
