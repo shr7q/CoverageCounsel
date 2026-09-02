@@ -1,5 +1,6 @@
 "use client";
 
+import { Show, SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
@@ -24,11 +25,12 @@ interface QueryResponse {
   cited_chunk_ids: string[];
   phantom_citations: string[];
   unsupported_citations: UnsupportedCitation[];
+  viewer_role: string;
 }
 
 export default function Home() {
+  const { getToken } = useAuth();
   const [question, setQuestion] = useState("");
-  const [asUser, setAsUser] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<QueryResponse | null>(null);
@@ -39,10 +41,18 @@ export default function Home() {
     setError(null);
     setResult(null);
     try {
+      // Signed-in: attach a real, verifiable Clerk session token. Signed
+      // out: no Authorization header at all -- the API scopes that to
+      // standard access on its own (see api.py's ANONYMOUS_USER), it isn't
+      // something the client claims.
+      const token = await getToken();
       const res = await fetch(`${API_URL}/query`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: q, as_user: asUser || null }),
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ question: q }),
       });
       if (!res.ok) {
         const detail = await res.text();
@@ -91,26 +101,22 @@ export default function Home() {
         />
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5 rounded-full border border-border bg-background/60 p-1 text-xs">
-            {[
-              { value: "", label: "Unrestricted" },
-              { value: "alice_clinician", label: "🧑‍⚕️ Clinician" },
-              { value: "bob_admin", label: "🛡️ Admin" },
-            ].map((opt) => (
+          <Show when="signed-out">
+            <SignInButton mode="modal">
               <button
-                key={opt.value}
                 type="button"
-                onClick={() => setAsUser(opt.value)}
-                className={`rounded-full px-3 py-1.5 font-medium transition-all ${
-                  asUser === opt.value
-                    ? "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/30"
-                    : "text-foreground/60 hover:bg-foreground/5"
-                }`}
+                className="flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/70 transition-all hover:border-violet-400/60 hover:text-foreground"
               >
-                {opt.label}
+                🔐 Sign in
               </button>
-            ))}
-          </div>
+            </SignInButton>
+          </Show>
+          <Show when="signed-in">
+            <div className="flex items-center gap-2 rounded-full border border-border bg-background/60 py-1 pr-3 pl-1 text-xs text-foreground/70">
+              <UserButton />
+              signed in
+            </div>
+          </Show>
 
           <button
             type="submit"
@@ -159,6 +165,11 @@ export default function Home() {
 
       {result && (
         <div className="animate-fade-up flex flex-col gap-5 rounded-2xl border border-border bg-card/70 p-6 shadow-xl shadow-violet-950/5 backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 text-[11px] text-foreground/45">
+            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+            Answered with <span className="font-medium text-foreground/60">{result.viewer_role}</span> access
+          </div>
+
           {result.sub_questions.length > 1 && (
             <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/60">
               <span className="rounded-full bg-cyan-500/15 px-2.5 py-1 font-medium text-cyan-500">

@@ -16,7 +16,11 @@ CREATE TABLE roles (
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
-    role_id INTEGER NOT NULL REFERENCES roles(id)
+    role_id INTEGER NOT NULL REFERENCES roles(id),
+    -- Week 10: real Clerk accounts, provisioned just-in-time on first
+    -- authenticated request rather than seeded like alice_clinician/
+    -- bob_admin. Nullable because those two demo/CLI accounts have none.
+    clerk_user_id TEXT UNIQUE
 );
 
 CREATE TABLE documents (

@@ -90,7 +90,11 @@ def run_orchestrated_query(store: InMemoryStore, question: str, user: dict | Non
 
     user, when given, scopes retrieval to that user's RBAC access_levels
     (Week 6) -- resolved from Postgres via db.get_user(), enforced inside
-    store.search() itself, not filtered from the answer afterward."""
+    store.search() itself, not filtered from the answer afterward. A user
+    dict with id=None (Week 10: an unauthenticated web request, resolved to
+    the anonymous/standard scope rather than a real Postgres row) still
+    scopes retrieval normally but is skipped in query_log -- there's no
+    real user row to attach the log entry to."""
     allowed_doc_ids = db.get_allowed_doc_ids(user["access_levels"]) if user else None
 
     graph = build_graph(store)
@@ -106,7 +110,7 @@ def run_orchestrated_query(store: InMemoryStore, question: str, user: dict | Non
         }
     )
 
-    if user:
+    if user and user.get("id") is not None:
         all_retrieved_ids = sorted({c.chunk_id for r in result["retrieved"].values() for c, _ in r})
         db.log_query(user["id"], question, all_retrieved_ids)
 
